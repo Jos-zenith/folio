@@ -60,7 +60,7 @@ export default function CommandPalette() {
         hint: profile.email,
         run: () => navigator.clipboard?.writeText(profile.email).catch(() => {}),
       },
-      { group: "Actions", label: "Open résumé", hint: "PDF", run: ext(profile.resume) },
+      { group: "Actions", label: "Open résumé", hint: "printable", run: () => router.push(profile.resume) },
       { group: "Links", label: "GitHub", hint: profile.handle, run: ext(profile.github) },
       { group: "Links", label: "LinkedIn", run: ext(profile.linkedin) },
       { group: "Links", label: "LeetCode", run: ext(profile.leetcode) },

@@ -5,16 +5,14 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const sections = [
-  { id: "diary", label: "Diary" },
-  { id: "index", label: "Contents" },
-  { id: "money", label: "Chapters" },
-  { id: "story", label: "Story" },
-  { id: "beyond", label: "Beyond code" },
-  { id: "report", label: "Report card" },
-  { id: "contact", label: "Write to me" },
+  { id: "samples", label: "Memos" },
+  { id: "problem", label: "Try me" },
+  { id: "work", label: "Products" },
+  { id: "operations", label: "Operations" },
+  { id: "projects", label: "All projects" },
+  { id: "experience", label: "Experience" },
+  { id: "contact", label: "Contact" },
 ];
-
-const chapterIds = ["money", "field", "machines"];
 
 export function toggleTheme() {
   const root = document.documentElement;
@@ -35,12 +33,11 @@ export default function Nav() {
 
   useEffect(() => {
     if (!home) return;
-    const ids = [...sections.map((s) => s.id), ...chapterIds];
-    const els = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    const els = sections.map((s) => document.getElementById(s.id)).filter(Boolean) as HTMLElement[];
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting) setActive(chapterIds.includes(e.target.id) ? "money" : e.target.id);
+          if (e.isIntersecting) setActive(e.target.id);
         });
       },
       { rootMargin: "-45% 0px -50% 0px" }
@@ -55,8 +52,8 @@ export default function Nav() {
     <header className="bar">
       <div className="wrap row">
         <Link className="brand" href="/" aria-label="Zenith Joshua, home">
-          <b>Zenith</b>
-          <small>NOTEBOOK · VOL. 04</small>
+          <b>Zenith Joshua</b>
+          <small>Product · Founder&apos;s Office</small>
         </Link>
         <nav className="nav" aria-label="Sections">
           {sections.map((s) => (
@@ -69,7 +66,7 @@ export default function Nav() {
           <button
             className="iconbtn"
             type="button"
-            aria-label="Search the notebook"
+            aria-label="Search the site"
             onClick={() => window.dispatchEvent(new Event("open-palette"))}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -78,7 +75,7 @@ export default function Nav() {
             </svg>
             <span className="kbd">Ctrl K</span>
           </button>
-          <button className="iconbtn" type="button" aria-label="Switch between paper and blueprint mode" onClick={toggleTheme}>
+          <button className="iconbtn" type="button" aria-label="Toggle dark mode" onClick={toggleTheme}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
             </svg>

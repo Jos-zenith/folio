@@ -1,40 +1,60 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, IBM_Plex_Mono, Kalam, Fredoka } from "next/font/google";
+import { Bricolage_Grotesque, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import Nav from "@/components/Nav";
 import CommandPalette from "@/components/CommandPalette";
-import DrawObserver from "@/components/DrawObserver";
+import Motion from "@/components/Motion";
+import { profile } from "@/lib/data";
 import "./globals.css";
 
-const body = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-body" });
+const body = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-body" });
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-mono" });
-const magnet = Fredoka({ subsets: ["latin"], weight: ["600"], variable: "--font-magnet" });
-const hand = Kalam({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-hand" });
+const display = Bricolage_Grotesque({ subsets: ["latin"], axes: ["wdth", "opsz"], variable: "--font-display" });
+
+const description =
+  "Zenith Joshua J: operator and product builder from Chennai, open to Founder's Office and APM roles. Capacity models and strategy memos, a 20+ person EV team, a 500-person symposium, and live products in fintech, agriculture and hardware.";
 
 export const metadata: Metadata = {
-  title: { default: "Zenith Joshua", template: "%s · Zenith Joshua" },
-  description:
-    "Zenith Joshua J: engineer, product builder and founder from Chennai. Fraud detection, offline-first platforms, compliance infrastructure, EVs and startups.",
+  metadataBase: new URL(profile.site),
+  title: { default: "Zenith Joshua · Founder's Office & Product", template: "%s · Zenith Joshua" },
+  description,
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Zenith Joshua",
-    description: "Engineer, product builder and founder from Chennai.",
+    title: "Zenith Joshua · Founder's Office & Product",
+    description,
+    url: "/",
+    siteName: "Zenith Joshua",
     type: "website",
-    images: ["/img/ev-track-day.jpg"],
+    images: [{ url: "/img/ev-track-day.jpg", alt: "The Turbonites electric four-wheeler on test day" }],
   },
+  twitter: { card: "summary_large_image", title: "Zenith Joshua · Founder's Office & Product", description },
 };
 
-const themeScript = `try{var t=localStorage.getItem('zj-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}`;
+const personLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  jobTitle: "Product & Founder's Office",
+  email: `mailto:${profile.email}`,
+  url: profile.site,
+  address: { "@type": "PostalAddress", addressLocality: "Chennai", addressRegion: "Tamil Nadu", addressCountry: "IN" },
+  alumniOf: "Loyola-ICAM College of Engineering & Technology",
+  sameAs: [profile.linkedin, profile.github],
+};
+
+const themeScript = `try{var t=localStorage.getItem('zj-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('motion');`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${body.variable} ${mono.variable} ${hand.variable} ${magnet.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${body.variable} ${mono.variable} ${display.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }} />
       </head>
       <body>
         <Nav />
         {children}
         <CommandPalette />
-        <DrawObserver />
+        <Motion />
       </body>
     </html>
   );

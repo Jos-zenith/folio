@@ -2,17 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Simplified Nolambur chain: 1 victim → 4 first-layer mules → 8 cash-out accounts.
+// Simplified Nolambur chain: 1 victim → 4 first-layer mules → 8 onward-hop accounts.
 const V = { x: 50, y: 150 };
 const L1 = [50, 116, 184, 250].map((y) => ({ x: 230, y }));
 const L2 = [22, 58, 94, 130, 170, 206, 242, 278].map((y) => ({ x: 420, y }));
 
-// step 0: idle · 1: bursts leave victim · 2: mules flagged · 3: next hop predicted & frozen
+// step 0: idle · 1: instalments leave victim · 2: mules flagged · 3: onward hops held
 const CAPTIONS = [
-  { t: "t + 0s", text: "A victim under a fake 'digital arrest' starts sending ₹5L bursts." },
-  { t: "t + 40s", text: "The money lands in first-layer mule accounts, each just under the alert limit." },
-  { t: "t + 41s", text: "Mule Pulse fires: fast inflow, instant outflow, geo-mismatch, amounts clustered near ₹5L." },
-  { t: "t + 42s", text: "The model predicts the next-hop cash-out accounts and raises a pre-freeze signal." },
+  { t: "t + 0s", text: "A victim under a fake 'digital arrest' pays in instalments, each under the ₹1 lakh UPI cap." },
+  { t: "t + 40s", text: "The money lands in first-layer mule accounts, which start forwarding it within minutes." },
+  { t: "t + 41s", text: "Rules summed over 24 h fire: inflow burst from new payers, rapid pass-through, splits under the cap. The graph model agrees." },
+  { t: "t + 42s", text: "The decision router holds outbound transfers, so later instalments and onward hops stop. Every action lands in the audit chain." },
 ];
 
 export default function MuleGraph() {
@@ -43,7 +43,7 @@ export default function MuleGraph() {
         <b>Exhibit A · mule chain</b>
         <span className="note">press replay ↓</span>
       </div>
-      <svg viewBox="0 0 470 300" role="img" aria-label="Diagram: money flows from a victim to four mule accounts, which are flagged, and eight predicted cash-out accounts that are frozen before the money reaches them.">
+      <svg viewBox="0 0 470 300" role="img" aria-label="Diagram: money flows from a victim to four mule accounts, which are flagged, and eight onward-hop accounts whose transfers are held.">
         {L1.map((m, i) => (
           <line key={`e1${i}`} x1={V.x} y1={V.y} x2={m.x} y2={m.y} className={`mg-edge${step >= 1 ? " hot" : ""}`} />
         ))}
@@ -84,7 +84,7 @@ export default function MuleGraph() {
           <circle key={`n2${i}`} cx={c.x} cy={c.y} r="9" className={`mg-node${step >= 3 ? " pred" : ""}`} />
         ))}
         <text x={466} y={298} textAnchor="end" className={`mg-lbl${step >= 3 ? " red" : ""}`}>
-          {step >= 3 ? "cash-out · pre-freeze" : "L2 accounts"}
+          {step >= 3 ? "onward hop · held" : "L2 accounts"}
         </text>
 
         <text x={10} y={292} className="mg-clock">{cap.t}</text>

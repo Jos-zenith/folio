@@ -1,559 +1,479 @@
-import Image from "next/image";
 import Link from "next/link";
-import Contents from "@/components/Contents";
-import MorePages from "@/components/MorePages";
-import Story from "@/components/Story";
-import Figure from "@/components/Figure";
 import CopyButton from "@/components/CopyButton";
-import Greeting from "@/components/Greeting";
-import Diary from "@/components/Diary";
+import MemoDeck from "@/components/MemoDeck";
+import NumberCycler from "@/components/NumberCycler";
+import ProblemPicker from "@/components/ProblemPicker";
+import ProjectIndex from "@/components/ProjectIndex";
 import {
-  CircleMark,
-  CoinLock,
-  Cube,
-  DragHint,
-  Gears,
-  Heart,
-  PaperPlane,
-  Pencil,
-  RoadCar,
-  Seedling,
-  Spiral,
-  Star,
-} from "@/components/Scribbles";
-import { awards, beyond, chapters, learning, now, profile, projects, skills, stats, statusClass, type Project } from "@/lib/data";
+  awards,
+  experience,
+  learning,
+  now,
+  operatingLog,
+  operations,
+  profile,
+  projects,
+  selected,
+  skills,
+  statusClass,
+  ticker,
+} from "@/lib/data";
 
-function DateBox({ date = "", page }: { date?: string; page: string }) {
+/** Bento sizes for the selected products, in the order they're laid out. */
+const bento: [string, "xl" | "wide" | "sm"][] = [
+  ["operation-nolambur", "xl"],
+  ["vina", "wide"],
+  ["impact-ledger", "sm"],
+  ["uzhavan", "sm"],
+  ["compintel", "wide"],
+  ["blastwatch", "wide"],
+];
+
+/** A plain number ("8+", "0.961", "₹3.6 L") counts up on scroll; ranges and words stay as they are. */
+const countable = (v: string) => /^[^\d–]*\d[\d,]*(\.\d+)?[^\d–]*$/.test(v);
+
+/** Trustify's story in one picture: a victim's instalments fan out to mules and on to cash-out within minutes. */
+function MoneyTrail() {
+  const mules = [28, 75, 122];
+  const layer2 = [48, 102];
   return (
-    <div className="datebox" aria-hidden="true">
-      <span>
-        DATE<b>{date || "__ / __ / __"}</b>
+    <figure className="trail" aria-label="How a UPI scam moves money: victim to first-layer mules to a second layer to cash-out">
+      <svg viewBox="0 0 520 150" aria-hidden="true">
+        {mules.map((y) => (
+          <path key={`v${y}`} className="trail-edge hot" d={`M44 75 C 110 75, 110 ${y}, 176 ${y}`} />
+        ))}
+        {mules.map((y, i) => (
+          <path
+            key={`m${y}`}
+            className={`trail-edge${i !== 1 ? " hot" : ""}`}
+            d={`M204 ${y} C 260 ${y}, 260 ${layer2[i === 2 ? 1 : 0]}, 316 ${layer2[i === 2 ? 1 : 0]}`}
+          />
+        ))}
+        {layer2.map((y) => (
+          <path key={`l${y}`} className="trail-edge hot" d={`M344 ${y} C 400 ${y}, 400 75, 456 75`} />
+        ))}
+        <circle className="trail-node victim" cx="30" cy="75" r="14" />
+        {mules.map((y, i) => (
+          <circle key={`n${y}`} className={`trail-node${i !== 1 ? " flag" : ""}`} cx="190" cy={y} r="12" />
+        ))}
+        {layer2.map((y) => (
+          <circle key={`n2${y}`} className="trail-node flag" cx="330" cy={y} r="12" />
+        ))}
+        <circle className="trail-node" cx="470" cy="75" r="14" />
+        <text className="trail-lbl" x="30" y="112" textAnchor="middle">victim</text>
+        <text className="trail-lbl" x="190" y="148" textAnchor="middle">first-layer mules</text>
+        <text className="trail-lbl" x="330" y="136" textAnchor="middle">layer 2</text>
+        <text className="trail-lbl" x="470" y="112" textAnchor="middle">cash-out</text>
+      </svg>
+      <figcaption className="trail-cap">Instalments under the ₹1 lakh cap, forwarded in minutes. Orange: held before payout.</figcaption>
+    </figure>
+  );
+}
+
+function SectionHead({ num, label, title, lede }: { num: string; label: string; title: string; lede?: string }) {
+  return (
+    <header className="shead" data-reveal>
+      <span className="kicker">
+        <i>{num}</i>
+        {label}
       </span>
-      <span>
-        PAGE NO.<b>{page}</b>
-      </span>
-    </div>
+      <h2>{title}</h2>
+      {lede && <p>{lede}</p>}
+    </header>
   );
 }
 
 export default function Home() {
+  const live = projects.filter((p) => p.status === "Live").length;
+  const work = experience.filter((r) => r.kind === "Work" || r.kind === "Venture");
+  const lead = experience.filter((r) => r.kind === "Leadership" || r.kind === "Education");
+
   return (
     <main>
-      <div className="book">
-        {/* ============ COVER ============ */}
-        <section className="leaf kraft cover" id="top" aria-label="Cover">
-          <div className="inner">
-            <div className="cover-grid">
-              <div>
-                <Greeting />
-                <div className="label">
-                  <div className="label-top">NOTEBOOK</div>
-                  <div className="field name">
-                    <span>NAME</span>
-                    <b>Zenith Joshua J</b>
-                  </div>
-                  <div className="field">
-                    <span>SUBJECT</span>
-                    <b>Things I&apos;ve built (and a few I broke)</b>
-                  </div>
-                  <div className="field split">
-                    <span>CLASS</span>
-                    <b>B.Tech IT &apos;27</b>
-                    <span>SEC</span>
-                    <b>LICET, Chennai</b>
-                  </div>
-                </div>
-                <p className="statement">
-                  I take real problems and build my way out of them. <mark>A ₹22.5L scam.</mark>{" "}
-                  <mark className="pink">A farm with no signal.</mark> <mark className="green">A car that didn&apos;t exist yet.</mark>
-                </p>
-                <div className="ctas">
-                  <a className="btn pen" href="#index">
-                    Open the notebook
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 5v14M6 13l6 6 6-6" />
-                    </svg>
-                  </a>
-                  <a className="textlink" href={profile.resume} target="_blank" rel="noopener">
-                    Résumé
-                  </a>
-                  <a className="textlink" href={profile.github} target="_blank" rel="noopener">
-                    GitHub
-                  </a>
-                </div>
-              </div>
+      {/* ============ HERO ============ */}
+      <section className="hero wrap" id="top" aria-labelledby="hero-name">
+        <div className="hero-main">
+          <span className="eyebrow">
+            <i className="dot" aria-hidden="true" />
+            Open to {profile.seeking}
+          </span>
+          <h1 id="hero-name">
+            Zenith
+            <br />
+            Joshua J
+          </h1>
+          <p className="hero-line">
+            I do the <mark>arithmetic</mark> before the plan, then I ship it.
+          </p>
+          <p className="hero-sub">
+            Co-founder &amp; CTO, EV team captain, club president, APM intern. {live} live products, each with a written case
+            study. B.Tech IT &apos;27, LICET, {profile.location}.
+          </p>
+          <div className="ctas">
+            <a className="btn primary" href={profile.problemMail}>
+              Send me a problem →
+            </a>
+            <Link className="btn" href={profile.resume}>
+              Résumé
+            </Link>
+            <a className="btn ghost" href={profile.linkedin} target="_blank" rel="noopener">
+              LinkedIn ↗
+            </a>
+            <a className="btn ghost" href={profile.github} target="_blank" rel="noopener">
+              GitHub ↗
+            </a>
+          </div>
+          <p className="cta-note">Two sentences about a problem on your desk; a one-page memo back within 24 hours.</p>
+        </div>
+        <NumberCycler />
+      </section>
 
-              <div className="cover-side">
-                <div className="sticker star" aria-hidden="true">
-                  <span>
-                    7
-                    <br />
-                    podiums
+      <div className="ticker" aria-label="Highlights">
+        <div className="ticker-track">
+          {[0, 1].map((copy) => (
+            <ul key={copy} aria-hidden={copy === 1 ? true : undefined}>
+              {ticker.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+
+      {/* ============ FOUNDER MEMOS ============ */}
+      <section className="section wrap" id="samples">
+        <SectionHead
+          num="01"
+          label="Founder memos"
+          title="Four times the numbers changed the plan."
+          lede="Most founder's-office work is deciding what not to do. Pick a memo: the chart, the quick take, and the document behind it."
+        />
+        <div data-reveal>
+          <MemoDeck />
+        </div>
+      </section>
+
+      {/* ============ THROW ME A PROBLEM ============ */}
+      <section className="section band" id="problem">
+        <div className="wrap">
+          <SectionHead
+            num="02"
+            label="Throw me a problem"
+            title="Pick a fire. Here's my first week."
+            lede="Every plan starts with the arithmetic and ends with one number to watch."
+          />
+          <div data-reveal>
+            <ProblemPicker />
+          </div>
+        </div>
+      </section>
+
+      {/* ============ PRODUCTS ============ */}
+      <section className="section wrap" id="work">
+        <SectionHead
+          num="03"
+          label="Products"
+          title="Built, shipped, measured."
+          lede="Six flagships with live builds and public code. Each case study covers the decisions and what didn't work."
+        />
+        <div className="bento">
+          {bento.map(([slug, size]) => {
+            const sel = selected.find((x) => x.slug === slug)!;
+            const p = projects.find((x) => x.slug === slug)!;
+            const [lead, ...rest] = sel.metrics;
+            return (
+              <article className={`tile tile-${size}`} key={slug} data-reveal>
+                <div className="tile-top">
+                  <span>{p.category}</span>
+                  <span className={`pill ${statusClass[p.status]}`}>{p.status}</span>
+                </div>
+                <h3>
+                  <Link className="tile-link" href={`/work/${slug}`}>
+                    {p.title}
+                  </Link>
+                </h3>
+                <p className="tile-tag">{p.tagline}</p>
+                {size === "xl" && <MoneyTrail />}
+                <p className="tile-big">
+                  <span {...(countable(lead[0]) ? { "data-count": "" } : {})}>{lead[0]}</span>
+                  <small>{lead[1]}</small>
+                </p>
+                {size !== "sm" && <p className="tile-problem">{sel.problem}</p>}
+                {size === "xl" && (
+                  <dl className="tile-more">
+                    {rest.map(([v, l]) => (
+                      <div key={l}>
+                        <dd>{v}</dd>
+                        <dt>{l}</dt>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+                <div className="tile-links">
+                  <span className="tile-go" aria-hidden="true">
+                    Case study →
                   </span>
+                  {p.live && (
+                    <a href={p.live} target="_blank" rel="noopener">
+                      Live ↗
+                    </a>
+                  )}
+                  {p.code && (
+                    <a href={p.code} target="_blank" rel="noopener">
+                      Code ↗
+                    </a>
+                  )}
                 </div>
-                <figure className="polaroid taped">
-                  <Image
-                    src="/img/ev-track-day.jpg"
-                    alt="Our electric four-wheeler on test day, two drivers in helmets, team watching"
-                    width={1080}
-                    height={864}
-                    priority
-                    sizes="(max-width: 960px) 90vw, 430px"
-                  />
-                  <figcaption>Turbonites, test day. I captained this team.</figcaption>
-                </figure>
-                <div className="sticker round" aria-hidden="true">
-                  20+
-                  <br />
-                  crew
-                </div>
-                <aside className="sticky" aria-label="What I'm doing now">
-                  <h4>Right now</h4>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ============ OPERATIONS ============ */}
+      <section className="section ink" id="operations">
+        <div className="wrap">
+          <SectionHead
+            num="04"
+            label="Operations"
+            title="Teams, budgets and deadlines I've run."
+            lede="Founder's-office work from the plan to the day itself. Open any card for what I built."
+          />
+          <div className="wall">
+            {operations.map((o) => (
+              <article className="wall-item" key={o.title} data-reveal>
+                <p className="wall-num">
+                  <span data-count="">{o.big}</span>
+                </p>
+                <p className="wall-label">{o.bigLabel}</p>
+                <h3>
+                  {o.title}
+                  <small>{o.role}</small>
+                </h3>
+                <p className="wall-problem">{o.problem}</p>
+                <details>
+                  <summary>What I built</summary>
                   <ul>
-                    {now.slice(0, 3).map((n) => (
-                      <li key={n}>{n}</li>
+                    {o.built.map((b) => (
+                      <li key={b}>{b}</li>
                     ))}
                   </ul>
-                </aside>
-              </div>
-            </div>
+                  {o.numbers.length > 0 && (
+                    <p className="wall-facts">{o.numbers.map(([k, v]) => `${k}: ${v}`).join(" · ")}</p>
+                  )}
+                </details>
+              </article>
+            ))}
           </div>
-        </section>
 
-        {/* ============ DIARY ============ */}
-        <section className="leaf ruled" id="diary">
-          <a className="tab t-orange" href="#diary">Diary</a>
-          <div className="inner">
-            <DateBox page="00" />
-            <div className="mdoodles" aria-hidden="true">
-              <Heart />
-              <Spiral />
-              <Star />
-            </div>
-            <Diary />
-          </div>
-        </section>
-
-        {/* ============ CONTENTS (printed page) ============ */}
-        <section className="leaf ruled" id="index">
-          <a className="tab t-red" href="#index">Contents</a>
-          <div className="inner">
-            <DateBox page="01" />
-            <div className="mdoodles" aria-hidden="true">
-              <Star />
-              <Spiral />
-              <Cube />
-              <Heart />
-            </div>
-            <div className="facts" aria-label="Quick facts">
-              {stats.map((s) => (
-                <div className="fact" key={s.label}>
-                  <span className="num">
-                    {s.value}
-                    <CircleMark />
-                  </span>
-                  <p>{s.label}</p>
-                </div>
+          <div className="nos" data-reveal>
+            <h3 className="nos-h">Every &ldquo;no&rdquo; became a result.</h3>
+            <ol>
+              {operatingLog.log.map((l) => (
+                <li key={l.gap} data-reveal>
+                  <s>{l.gap}</s>
+                  <span className="nos-move">{l.move}</span>
+                  <b>{l.result}</b>
+                </li>
               ))}
-            </div>
-            <div className="printed">
-              <span className="kicker">Page 1</span>
-              <div className="rule2" />
-              <h2>Contents</h2>
-              <div className="rule2" />
-              <p>
-                Three chapters, {projects.length} projects. Jump to one, or keep scrolling and read in order. Every project has its own page with the
-                problem, the decisions and what came out of it.
-              </p>
-            </div>
-            <Contents />
-            <p className="note toc-hint">psst, Ctrl K finds any page instantly</p>
+            </ol>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ============ CH. 1: PASSBOOK ============ */}
-        {(() => {
-          const c = chapters[0];
-          const feat = projects.find((p) => p.slug === c.featured)!;
-          const rest = projects.filter((p) => p.category === c.name && p.slug !== c.featured);
-          return (
-            <section className="leaf passbook" id={c.id}>
-              <a className="tab t-yellow" href={`#${c.id}`}>
-                Ch. 1
-              </a>
-              <div className="inner" style={{ paddingLeft: "clamp(18px, 5vw, 70px)" }}>
-                <div className="pb-band">
-                  <div className="bank">
-                    Passbook of trust
-                    <small>Chapter 1 · {c.name}</small>
-                  </div>
-                  <div className="acno">
-                    A/C NO.
-                    <b>0001 · ZEN · 2026</b>
-                  </div>
-                  <div className="pb-seal" aria-hidden="true">
-                    VERIFIED
-                    <br />★
-                  </div>
-                </div>
-                <div className="pb-intro">
-                  <div>
-                    <h2>{c.title}</h2>
-                    <p>{c.intro}</p>
-                  </div>
-                  <div className="ch-art">
-                    <CoinLock />
-                    <span className="note">keep it locked</span>
-                  </div>
-                </div>
-                <Exhibit feat={feat} />
-                <MorePages items={rest} variant="ledger" chapterNo="01" />
-              </div>
-            </section>
-          );
-        })()}
+      {/* ============ HOW I OPERATE ============ */}
+      <section className="section wrap" id="operate">
+        <SectionHead num="05" label="How I operate" title="Four rules I actually follow." />
+        <ol className="rules">
+          {operatingLog.rules.map((r, i) => (
+            <li key={r.title} data-reveal>
+              <span>{String(i + 1).padStart(2, "0")}</span>
+              <b>{r.title}</b>
+              <p>{r.body}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-        {/* ============ CH. 2: FIELD JOURNAL ============ */}
-        {(() => {
-          const c = chapters[1];
-          const feat = projects.find((p) => p.slug === c.featured)!;
-          const rest = projects.filter((p) => p.category === c.name && p.slug !== c.featured);
-          return (
-            <section className="leaf graph" id={c.id}>
-              <a className="tab t-green" href={`#${c.id}`}>
-                Ch. 2
-              </a>
-              <div className="inner">
-                <div className="mdoodles" aria-hidden="true">
-                  <Spiral />
-                  <Heart />
-                  <Star />
-                </div>
-                <div className="ch-head">
-                  <div className="ch-num" aria-hidden="true">
-                    <small>Ch.</small>
-                    {c.num}
-                  </div>
-                  <div>
-                    <span className="kicker">Field journal · {c.name}</span>
-                    <h2>{c.title}</h2>
-                    <p>{c.intro}</p>
-                    <span className="note">← {c.note}</span>
-                  </div>
-                  <div className="ch-art">
-                    <Seedling />
-                    <span className="note">even with one bar of signal</span>
-                  </div>
-                </div>
-                <Exhibit feat={feat} reverse />
-                <MorePages items={rest} variant="notes" chapterNo="02" />
-              </div>
-            </section>
-          );
-        })()}
-
-        {/* ============ CH. 3: BLUEPRINT ============ */}
-        {(() => {
-          const c = chapters[2];
-          const feat = projects.find((p) => p.slug === c.featured)!;
-          const rest = projects.filter((p) => p.category === c.name && p.slug !== c.featured);
-          return (
-            <section className="leaf blueprint" id={c.id}>
-              <a className="tab t-blue" href={`#${c.id}`}>
-                Ch. 3
-              </a>
-              <div className="inner" style={{ paddingLeft: "clamp(18px, 4.5vw, 60px)" }}>
-                <div className="sheet-frame">
-                  <div className="dwg-head">
-                    <div className="dwg-no">
-                      Dwg no.
-                      <b>03</b>
-                    </div>
-                    <div className="dwg-title">
-                      <span className="kicker">Chapter 3 · {c.name}</span>
-                      <h2>{c.title}</h2>
-                      <p>{c.intro}</p>
-                    </div>
-                    <div className="ch-art">
-                      <Gears />
-                    </div>
-                  </div>
-                  <RoadCar note="our EV, not to scale" />
-                  <div style={{ marginTop: 40 }}>
-                    <Exhibit feat={feat} />
-                  </div>
-                  <MorePages items={rest} variant="parts" chapterNo="03" />
-                  <div className="titleblock" aria-label="Drawing title block">
-                    <div>
-                      Drawn by<b>Zenith J.</b>
-                    </div>
-                    <div>
-                      Checked<b>Turbonites</b>
-                    </div>
-                    <div>
-                      Scale<b>1 : 1</b>
-                    </div>
-                    <div>
-                      Parts<b>{rest.length + 1}</b>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-          );
-        })()}
-
-        {/* ============ STORY ============ */}
-        <section className="leaf ruled" id="story">
-          <a className="tab t-pink" href="#story">Story</a>
-          <div className="inner">
-            <DateBox date="2023 → now" page="—" />
-            <div className="mdoodles" aria-hidden="true">
-              <Cube />
-              <Star />
-            </div>
-            <div className="shead">
-              <div className="tape-title">
-                <h2>The story so far, one year per page</h2>
-              </div>
-              <DragHint label="keep scrolling, the pages turn" />
-            </div>
-            <Story />
+      {/* ============ ALL PROJECTS ============ */}
+      <section className="section band" id="projects">
+        <div className="wrap">
+          <SectionHead
+            num="06"
+            label="All projects"
+            title={`Everything, ${projects.length} in all.`}
+            lede="Filter by area. Each one opens to a case study."
+          />
+          <div data-reveal>
+            <ProjectIndex />
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ============ BEYOND: FRIDGE DOOR ============ */}
-        <section className="leaf fridge" id="beyond">
-          <a className="tab t-purple" href="#beyond">Beyond</a>
-          <div className="fridge-handle" aria-hidden="true" />
-          <div className="inner">
-            <span className="kicker">On the fridge door</span>
-            <h2 className="sr">The people side</h2>
-            <MagnetWord text="THE PEOPLE SIDE" />
-            <p className="fridge-sub">Clubs, communities and founders I spend my evenings on. Stuck up where I see them every day.</p>
-            <div className="wall">
-              {beyond.map((b) => (
-                <div className={`sticky ${b.tone}`} key={b.title}>
-                  <h4>{b.title}</h4>
-                  <div className="big">{b.big}</div>
-                  <p>{b.body}</p>
-                </div>
-              ))}
+      {/* ============ EXPERIENCE ============ */}
+      <section className="section wrap" id="experience">
+        <SectionHead num="07" label="Experience" title="Where I've worked and what I've led." />
+        <div className="two">
+          {[
+            { h: "Work & ventures", rows: work },
+            { h: "Leadership & education", rows: lead },
+          ].map((col) => (
+            <div key={col.h} data-reveal>
+              <h3 className="col-h">{col.h}</h3>
+              <ol className="roles">
+                {col.rows.map((r) => (
+                  <li key={r.title + r.org} className={r.current ? "current" : undefined}>
+                    <span className="when">
+                      {r.period}
+                    </span>
+                    <div>
+                      <b>{r.title}</b>
+                      <span className="org">{r.org}</span>
+                      <p>{r.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
             </div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </section>
 
-        {/* ============ REPORT CARD ============ */}
-        <section className="leaf plain" id="report">
-          <a className="tab t-green" href="#report">Report</a>
-          <div className="inner" style={{ paddingLeft: "clamp(18px, 5vw, 70px)" }}>
-            <div className="report-title">
-              <span className="kicker">Marks &amp; remarks</span>
-              <h2>Report card</h2>
-              <p>Competitions I placed in, and what&apos;s on my desk to learn next.</p>
-              <span className="rstamp">Promoted ★</span>
-            </div>
-            <div className="duo">
-              <div className="report">
-                <span className="grade" aria-hidden="true">★</span>
-                <div className="report-head">
-                  <b>Progress report</b>
-                  <span>2023 – 2026 · {awards.length} entries</span>
-                </div>
-                <div className="rrow h">
-                  <span>Event</span>
-                  <span className="res">Result</span>
-                  <span className="rem">Remarks</span>
-                </div>
-                {awards.map((a) => (
-                  <div className="rrow" key={a.event}>
-                    <span className="ev">{a.event}</span>
-                    <span className="res">{a.place}</span>
-                    <span className="rem">{a.detail}</span>
+      {/* ============ RECOGNITION & SKILLS ============ */}
+      <section className="section band" id="recognition">
+        <div className="wrap">
+          <SectionHead num="08" label="Recognition & skills" title="Podiums, toolkit, and what's next." />
+          <ul className="podium">
+            {awards.map((a) => (
+              <li key={a.event} data-reveal>
+                <span className="place">{a.place}</span>
+                <b>{a.event}</b>
+                <small>{a.detail}</small>
+              </li>
+            ))}
+          </ul>
+          <div className="two toolkit">
+            <div data-reveal>
+              <h3 className="col-h">Toolkit</h3>
+              <dl className="skills">
+                {skills.map((s) => (
+                  <div key={s.group}>
+                    <dt>{s.group}</dt>
+                    <dd>
+                      {s.core.map((i) => (
+                        <span key={i} className="core">
+                          {i}
+                        </span>
+                      ))}
+                      {s.familiar.map((i) => (
+                        <span key={i}>{i}</span>
+                      ))}
+                    </dd>
                   </div>
                 ))}
-              </div>
-
-              <div className="desk">
                 <div>
-                  <h3>On my desk now</h3>
-                  <ul>
-                    {learning
-                      .filter((l) => l.state === "active")
-                      .map((l) => (
-                        <li className="active" key={l.title}>
-                          <b>{l.title}</b>
-                          <small>{l.detail}</small>
-                        </li>
-                      ))}
-                  </ul>
-                </div>
-                <div>
-                  <h3>Finished</h3>
-                  <ul>
-                    {learning
-                      .filter((l) => l.state === "done")
-                      .map((l) => (
-                        <li className="done" key={l.title}>
-                          <b>{l.title}</b>
-                          <small>{l.detail}</small>
-                        </li>
-                      ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="toolbox">
-              {skills.map((s) => (
-                <div key={s.group}>
-                  <h3>{s.group}</h3>
-                  <p>
-                    {s.items.map((i) => (
-                      <span key={i}>{i}</span>
+                  <dt>Languages</dt>
+                  <dd>
+                    {profile.languages.map((l) => (
+                      <span key={l}>{l}</span>
                     ))}
-                  </p>
+                  </dd>
                 </div>
-              ))}
-              <div>
-                <h3>Languages</h3>
-                <p>
-                  {profile.languages.map((l) => (
-                    <span key={l}>{l}</span>
+              </dl>
+              <p className="legend">
+                <span className="core">Bold</span> = used across several shipped projects. Plain = one or two.
+              </p>
+            </div>
+            <div data-reveal>
+              <h3 className="col-h">Now</h3>
+              <ul className="now-list">
+                {now.map((n) => (
+                  <li key={n}>{n}</li>
+                ))}
+              </ul>
+              <details className="learn-more">
+                <summary>Courses and reading ({learning.length})</summary>
+                <ul className="learn">
+                  {learning.map((l) => (
+                    <li key={l.title}>
+                      <span className={`pill ${l.state === "active" ? "warn" : "ok"}`}>
+                        {l.state === "active" ? "Now" : "Done"}
+                      </span>
+                      <div>
+                        <b>{l.title}</b>
+                        <small>{l.detail}</small>
+                      </div>
+                    </li>
                   ))}
-                </p>
-              </div>
+                </ul>
+              </details>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ============ LETTER: AIRMAIL ============ */}
-        <section className="leaf airmail" id="contact">
-          <a className="tab t-kraft" href="#contact">Letter</a>
-          <div className="inner">
-            <div className="post-head">
-              <div className="postmark" aria-hidden="true">
-                CHENNAI
-                <br />
-                AIR MAIL
-                <br />
-                2026
-              </div>
-              <div>
-                <span className="kicker">Last page · par avion</span>
-                <h2>Write to me</h2>
-              </div>
-              <PaperPlane className="scr-corner" />
+      {/* ============ CONTACT ============ */}
+      <section className="section ink" id="contact">
+        <div className="wrap contact">
+          <div data-reveal>
+            <span className="kicker">
+              <i>09</i>Contact
+            </span>
+            <h2>
+              Got a messy problem on your desk <mark>right now</mark>?
+            </h2>
+            <p>
+              Send me two sentences about it. I&apos;ll send back a one-page strategy memo within 24 hours, so you can see how I
+              think before we talk.
+            </p>
+            <div className="ctas">
+              <a className="btn primary" href={profile.problemMail}>
+                Send me a problem →
+              </a>
+              <Link className="btn" href={profile.resume}>
+                Résumé
+              </Link>
             </div>
-            <div className="letter-wrap">
-              <div className="letter">
-                <p>Dear reader,</p>
-                <p>thanks for flipping this far.</p>
-                <p>If something here made you curious, a project,</p>
-                <p>an idea, a team you&apos;re building, write to me.</p>
-                <p>I reply to every message.</p>
-                <span className="sign">– Zenith</span>
-              </div>
-              <div className="envelope">
-                <div className="postage" aria-hidden="true">
-                  CHENNAI
-                  <b>600 034</b>
-                  INDIA
-                </div>
-                <div className="addr">
-                  <span>Email</span>
-                  <div className="line">
-                    <a href={`mailto:${profile.email}`}>{profile.email}</a>
-                    <CopyButton value={profile.email} />
-                  </div>
-                </div>
-                <div className="addr">
-                  <span>Phone</span>
-                  <div className="line">
-                    <b>{profile.phone}</b>
-                    <CopyButton value={profile.phoneRaw} />
-                  </div>
-                </div>
-                <div className="addr">
-                  <span>Elsewhere</span>
-                  <div className="line">
-                    <a href={profile.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
-                    <a href={profile.github} target="_blank" rel="noopener">GitHub ↗</a>
-                    <a href={profile.leetcode} target="_blank" rel="noopener">LeetCode ↗</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <Pencil />
           </div>
-        </section>
+          <dl className="reach" data-reveal>
+            <div>
+              <dt>Email</dt>
+              <dd>
+                <a href={`mailto:${profile.email}`}>{profile.email}</a>
+                <CopyButton value={profile.email} />
+              </dd>
+            </div>
+            <div>
+              <dt>Phone</dt>
+              <dd>
+                <a href={`tel:${profile.phoneRaw}`}>{profile.phone}</a>
+                <CopyButton value={profile.phoneRaw} />
+              </dd>
+            </div>
+            <div>
+              <dt>Elsewhere</dt>
+              <dd>
+                <a href={profile.linkedin} target="_blank" rel="noopener">
+                  LinkedIn ↗
+                </a>
+                <a href={profile.github} target="_blank" rel="noopener">
+                  GitHub ↗
+                </a>
+                <a href={profile.leetcode} target="_blank" rel="noopener">
+                  LeetCode ↗
+                </a>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </section>
 
-        {/* ============ BACK COVER ============ */}
-        <footer className="leaf kraft backcover">
-          <div className="inner">
-            <p>Made by hand in Chennai · © 2026 {profile.name}</p>
-            <p style={{ fontSize: 16, opacity: 0.8 }}>Ctrl K to search the notebook · moon icon for the night version</p>
-            <div className="barcode">
-              <i />
-              <span>VOL. 04 · {projects.length} PAGES</span>
-            </div>
-          </div>
-        </footer>
-      </div>
+      <footer className="foot wrap">
+        <p>
+          © 2026 {profile.name} · {profile.location}
+        </p>
+        <p>Ctrl K to search · moon icon for dark mode</p>
+      </footer>
     </main>
-  );
-}
-
-function Exhibit({ feat, reverse = false }: { feat: Project; reverse?: boolean }) {
-  return (
-    <div className={`exhibit${reverse ? " rev" : ""}`}>
-      <div>
-        <div className="label-row">
-          featured page <span className={`stamp ${statusClass[feat.status]}`}>{feat.status}</span>
-        </div>
-        <h3>{feat.title}</h3>
-        <p className="tag">{feat.tagline}</p>
-        <p className="sum">{feat.summary}</p>
-        <ul className="decisions">
-          {feat.decisions.slice(0, 3).map((d) => (
-            <li key={d}>{d}</li>
-          ))}
-        </ul>
-        <div className="links">
-          <Link className="btn" href={`/work/${feat.slug}`}>
-            Read the full page →
-          </Link>
-          {feat.live && (
-            <a className="textlink" href={feat.live} target="_blank" rel="noopener">
-              Live
-            </a>
-          )}
-          {feat.code && (
-            <a className="textlink" href={feat.code} target="_blank" rel="noopener">
-              Code
-            </a>
-          )}
-        </div>
-      </div>
-      <Figure project={feat} />
-    </div>
-  );
-}
-
-const MAGNET_COLORS = ["#e0603f", "#1f5f73", "#f2b632", "#2f8a64", "#9b59b6", "#e0603f", "#3a8fd6"];
-
-function MagnetWord({ text }: { text: string }) {
-  return (
-    <div className="magnets" aria-hidden="true">
-      {text.split("").map((ch, i) =>
-        ch === " " ? (
-          <span key={i} className="gap" />
-        ) : (
-          <span key={i} style={{ "--c": MAGNET_COLORS[i % MAGNET_COLORS.length], "--r": `${((i * 37) % 13) - 6}deg` } as React.CSSProperties}>
-            {ch}
-          </span>
-        )
-      )}
-    </div>
   );
 }
