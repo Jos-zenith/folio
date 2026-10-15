@@ -470,7 +470,7 @@ export default function Home() {
         <p>
           © 2026 {profile.name} · {profile.location}
         </p>
-        <p>Ctrl K to search · moon icon for dark mode</p>
+        <p>Press ? for keyboard shortcuts · 1–7 to jump · Ctrl B to search</p>
       </footer>
     </main>
   );

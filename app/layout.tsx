@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import Nav from "@/components/Nav";
 import CommandPalette from "@/components/CommandPalette";
+import Shortcuts from "@/components/Shortcuts";
 import Motion from "@/components/Motion";
 import { profile } from "@/lib/data";
 import "./globals.css";
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         {children}
         <CommandPalette />
+        <Shortcuts />
         <Motion />
       </body>
     </html>

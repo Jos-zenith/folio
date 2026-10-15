@@ -24,6 +24,15 @@ export function toggleTheme() {
   } catch {}
 }
 
+/** "Ctrl" on Windows and Linux, "⌘" on a Mac. "Ctrl" until mounted to avoid a hydration mismatch. */
+export function useModKey() {
+  const [mod, setMod] = useState("Ctrl");
+  useEffect(() => {
+    if (/Mac|iPhone|iPad/.test(navigator.userAgent)) setMod("⌘");
+  }, []);
+  return mod;
+}
+
 const istFormat = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", hour12: false });
 
 /** Local time in Chennai, so a visitor abroad knows when I'll reply. Blank until mounted to avoid a hydration mismatch. */
@@ -42,9 +51,47 @@ function Clock() {
   );
 }
 
+const roles = ["Founder's Office · Product", "writes the memos", "ships the code", "runs the team", "reads the data"];
+
+/** The line under my name types itself through what I actually do, then settles back on the title. Static without motion. */
+function RoleTicker() {
+  const [text, setText] = useState(roles[0]);
+  useEffect(() => {
+    if (!document.documentElement.classList.contains("motion")) return;
+    let i = 0;
+    let n = roles[0].length;
+    let dir = -1;
+    let t: ReturnType<typeof setTimeout>;
+    const tick = () => {
+      n += dir;
+      if (n < 0) {
+        i = (i + 1) % roles.length;
+        n = 0;
+        dir = 1;
+      }
+      setText(roles[i].slice(0, n));
+      let delay = dir < 0 ? 24 : 55;
+      if (dir > 0 && n === roles[i].length) {
+        dir = -1;
+        delay = i === 0 ? 6000 : 1700;
+      }
+      t = setTimeout(tick, delay);
+    };
+    t = setTimeout(tick, 4000);
+    return () => clearTimeout(t);
+  }, []);
+  return (
+    <small className="role" aria-hidden="true">
+      {text}
+      <i className="caret" />
+    </small>
+  );
+}
+
 /** The masthead: monogram, a numbered section index, the local clock, and a reading-progress rule along its foot. */
 export default function Nav() {
   const pathname = usePathname();
+  const mod = useModKey();
   const home = pathname === "/";
   const [active, setActive] = useState("");
   const [open, setOpen] = useState(false);
@@ -70,18 +117,19 @@ export default function Nav() {
   return (
     <header className="bar">
       <div className="wrap row">
-        <Link className="brand" href="/" aria-label="Zenith Joshua, home">
+        <Link className="brand" href="/" aria-label="Zenith Joshua, Founder's Office and Product, home">
           <span className="mark" aria-hidden="true">
             ZJ
+            <span className="dot" title="Open to Founder's Office and APM roles" />
           </span>
           <span>
             <b>Zenith Joshua</b>
-            <small>Founder&apos;s Office · Product</small>
+            <RoleTicker />
           </span>
         </Link>
         <nav className="nav" aria-label="Sections">
           {sections.map((s, i) => (
-            <a key={s.id} href={href(s.id)} className={active === s.id ? "on" : undefined}>
+            <a key={s.id} href={href(s.id)} className={active === s.id ? "on" : undefined} title={`Press ${i + 1}`}>
               <i>{num(i)}</i>
               {s.label}
             </a>
@@ -90,11 +138,17 @@ export default function Nav() {
         <div className="tools">
           <Clock />
           <button className="toolbtn" type="button" aria-label="Search the site" onClick={() => window.dispatchEvent(new Event("open-palette"))}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <svg className="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <circle cx="11" cy="11" r="7" />
               <path d="m20 20-3.5-3.5" />
             </svg>
-            <span className="kbd">Ctrl K</span>
+            <span className="kbd">
+              <kbd className="key">{mod}</kbd>
+              <kbd className="key">B</kbd>
+            </span>
+          </button>
+          <button className="toolbtn keys-btn" type="button" aria-label="Keyboard shortcuts" title="Keyboard shortcuts (?)" onClick={() => window.dispatchEvent(new Event("open-shortcuts"))}>
+            <kbd className="key">?</kbd>
           </button>
           <button className="toolbtn" type="button" aria-label="Toggle dark mode" onClick={toggleTheme}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

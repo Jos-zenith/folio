@@ -4,8 +4,9 @@ import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { profile, projects } from "@/lib/data";
 import { sections, toggleTheme } from "./Nav";
+import { copyEmail } from "./Shortcuts";
 
-type Item = { group: string; label: string; hint?: string; run: () => void };
+type Item = { group: string; label: string; hint?: string; key?: string; run: () => void };
 
 export default function CommandPalette() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function CommandPalette() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key.toLowerCase() === "b") {
         e.preventDefault();
         setOpen((o) => !o);
       }
@@ -46,23 +47,20 @@ export default function CommandPalette() {
     };
     const ext = (url: string) => () => window.open(url, "_blank", "noopener");
     return [
-      ...sections.map((s) => ({ group: "Jump to", label: s.label, hint: "section", run: go(s.id) })),
+      ...sections.map((s, i) => ({ group: "Jump to", label: s.label, key: String(i + 1), run: go(s.id) })),
       ...projects.map((p) => ({
         group: "Projects",
         label: p.title,
         hint: p.category,
         run: () => router.push(`/work/${p.slug}`),
       })),
-      { group: "Actions", label: "Toggle dark mode", run: toggleTheme },
-      {
-        group: "Actions",
-        label: "Copy email address",
-        hint: profile.email,
-        run: () => navigator.clipboard?.writeText(profile.email).catch(() => {}),
-      },
-      { group: "Actions", label: "Open résumé", hint: "printable", run: () => router.push(profile.resume) },
-      { group: "Links", label: "GitHub", hint: profile.handle, run: ext(profile.github) },
-      { group: "Links", label: "LinkedIn", run: ext(profile.linkedin) },
+      { group: "Actions", label: "Toggle dark mode", key: "D", run: toggleTheme },
+      { group: "Actions", label: "Copy email address", hint: profile.email, key: "E", run: copyEmail },
+      { group: "Actions", label: "Pitch me a problem", hint: "1-page memo back", key: "P", run: () => (window.location.href = profile.problemMail) },
+      { group: "Actions", label: "Open résumé", hint: "printable", key: "R", run: () => router.push(profile.resume) },
+      { group: "Actions", label: "Keyboard shortcuts", key: "?", run: () => window.dispatchEvent(new Event("open-shortcuts")) },
+      { group: "Links", label: "GitHub", hint: profile.handle, key: "G", run: ext(profile.github) },
+      { group: "Links", label: "LinkedIn", key: "L", run: ext(profile.linkedin) },
       { group: "Links", label: "LeetCode", run: ext(profile.leetcode) },
     ];
   }, [pathname, router]);
@@ -132,6 +130,7 @@ export default function CommandPalette() {
                 >
                   {i.label}
                   {i.hint && <small>{i.hint}</small>}
+                  {i.key && <kbd className="key">{i.key}</kbd>}
                 </div>
               </li>
             );
