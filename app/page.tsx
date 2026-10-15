@@ -145,7 +145,7 @@ export default function Home() {
         <SectionHead
           num="01"
           label="Founder memos"
-          title="Three times the numbers changed the plan."
+          title="Three calls I made, and why."
           lede="Most founder's-office work is deciding what not to do. Pick a memo: the chart, the quick take, and the document behind it."
         />
         <div data-reveal>
@@ -237,7 +237,7 @@ export default function Home() {
             num="04"
             label="Operations"
             title="Teams, budgets and deadlines I've run."
-            lede="Founder's-office work from the plan to the day itself. Two of these began with a “no”. Open any card for what I built."
+            lede="Founder's-office work from the plan to the day itself. Open any card for what I built."
           />
           <div className="wall">
             {operations.map((o) => (
@@ -250,12 +250,6 @@ export default function Home() {
                   {o.title}
                   <small>{o.role}</small>
                 </h3>
-                {o.origin && (
-                  <p className="wall-origin">
-                    <span>Started with a no</span>
-                    <s>{o.origin[0]}</s> → {o.origin[1]}
-                  </p>
-                )}
                 <p className="wall-problem">{o.problem}</p>
                 {o.link && (
                   <a className="wall-link" href={o.link[1]} target="_blank" rel="noopener">
@@ -291,6 +285,10 @@ export default function Home() {
             </li>
           ))}
         </ol>
+        <figure className="motto" data-reveal>
+          <blockquote>“{operatingLog.quote}”</blockquote>
+          <figcaption>The line I keep coming back to</figcaption>
+        </figure>
       </section>
 
       {/* ============ ALL PROJECTS ============ */}

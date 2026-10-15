@@ -466,41 +466,6 @@ export const projects: Project[] = [
     code: "https://github.com/Jos-zenith/HCCMS",
   },
   {
-    slug: "vgate",
-    title: "vgate",
-    tagline: "ECG signal-quality gating against false alarms",
-    category: "Machines",
-    year: "2026",
-    status: "Building",
-    role: "Final-year project: study design, detectors, C core, ESP32-S3 firmware",
-    summary:
-      "A pre-registered study of whether a signal-quality gate cuts false ventricular-beat alarms on a wearable chest strap better than raising the classifier's threshold. The gate looked good in-sample, didn't transfer, and was dropped. v1.0 is frozen without it. A research proof of concept, not a medical device.",
-    problem:
-      "ECG monitors raise so many false alarms on noisy signal that staff learn to tune them out, and the usual fix, a stricter threshold, also hides real beats.",
-    decisions: [
-      "Pre-registered every study before running it, with the pass bar written down, and locked the test set in code: the loader refuses DS2 records unless the frozen run asks for them.",
-      "Dropped the gate when the evidence said to. It gave 31% fewer false alarms than a raised threshold (95% CI 22.8–40.9%), but those operating points were matched on the test set. Cut-offs fixed in advance didn't transfer to unseen noise.",
-      "Froze v1.0 as threshold-only, with signal-quality shown to a reviewer but never used as a decision.",
-      "Ported the full chain to a C core with fixed-size state and no dynamic allocation, generated from the frozen config, so the ESP32 runs exactly what was validated.",
-    ],
-    highlights: [
-      "C and Python agree on 536,821 beats across 220 record copies; all 14 features are bit-identical",
-      "Beat detection on clean data: 99.7% sensitivity, 99.0% positive predictivity",
-      "V-beat retention 0.91 on held-out patients, with false alarms per hour reported for every noise type and level",
-      "Phase 2 (real strap noise and a reference Holter) pre-registered, with an ethics application drafted",
-    ],
-    facts: [
-      ["Data", "MIT-BIH + NSTDB"],
-      ["Split", "Inter-patient, test set locked"],
-      ["V retention", "0.91 (held-out patients)"],
-      ["Gate", "Tried, didn't transfer, dropped"],
-      ["Target", "ESP32-S3 · ≈ 160 KB state"],
-    ],
-    stack: ["Python", "SciPy", "C", "CMake", "ESP32-S3"],
-    code: "https://github.com/Jos-zenith/vict",
-    docs: [["Read the study write-up", "https://github.com/Jos-zenith/vict#readme"]],
-  },
-  {
     slug: "intellect",
     title: "Intellect",
     tagline: "Study-to-grade copilot",
@@ -681,19 +646,19 @@ export type Role = {
 
 export const experience: Role[] = [
   {
-    period: "Oct 2026 – now",
-    title: "Founding Keeper",
-    org: "The Rookery",
-    kind: "Venture",
+    period: "2026 – now",
+    title: "Club Lead & Founding Keeper",
+    org: "LICET Pattarai · The Rookery",
+    kind: "Leadership",
     current: true,
-    body: "Founded an 8-week online builder programme: cohorts of 25–30 students in huddles of 4–5, each shipping a fix for a real problem sponsored by a local clinic, NGO or shop. Designed the programme, the level system and the sponsor model, and built the site.",
+    body: "Founded Pattarai's daily build-and-mentoring activity, where members solve real problems with design thinking. Then launched The Rookery under it in Oct 2026: an 8-week online builder programme, cohorts of 25–30 in huddles of 4–5, each shipping a fix for a problem sponsored by a local clinic, NGO or shop. Designed the programme, the level system and the sponsor model, and built the site.",
   },
   {
-    period: "Jun 2026 – 2026",
+    period: "Jun – Jul 2026",
     title: "Associate Product Manager Intern",
     org: "Upskillmate",
     kind: "Work",
-    body: "Research competitor landscapes, find market gaps and benchmark features. Combine qualitative and quantitative data into recommendations on product direction.",
+    body: "Researched competitor landscapes, found market gaps and benchmarked features. Combined qualitative and quantitative data into recommendations on product direction.",
   },
   {
     period: "2026 – now",
@@ -705,19 +670,11 @@ export const experience: Role[] = [
   },
   {
     period: "2026 – now",
-    title: "Club Lead",
-    org: "LICET Pattarai",
-    kind: "Leadership",
-    current: true,
-    body: "Founded a daily build-and-mentoring activity where members solve real problems with design thinking.",
-  },
-  {
-    period: "2026 – now",
     title: "Convenor, Idea Cafe",
     org: "Institution's Innovation Council (IIC)",
     kind: "Leadership",
     current: true,
-    body: "Students and early PhD faculty lacked structured research training. As convenor, curriculum designer and facilitator, I built the nine-module journey, the pod model and the engagement system.",
+    body: "Students and early PhD faculty lacked structured research training. As convenor, curriculum designer and facilitator, I built the nine-module journey, the pod model and the engagement system. The first 10 members are in the ideation phase now.",
   },
   {
     period: "2026 – now",
@@ -727,30 +684,6 @@ export const experience: Role[] = [
     current: true,
     minor: true,
     body: "Planning the event strategy and marketing for the community's career conclave.",
-  },
-  {
-    period: "2026 – now",
-    title: "Startup Mentor",
-    org: "Early-stage student ventures",
-    kind: "Venture",
-    current: true,
-    minor: true,
-    body: "Mentor early-stage founders on problem validation, lean canvas and first-version scope.",
-  },
-  {
-    period: "May 2026 – now",
-    title: "Core Team Member",
-    org: "Team Starc, IN-SPACe CanSat '26",
-    kind: "Work",
-    current: true,
-    body: "Defining product scope and architecture for the NDVI payload subsystem, turning remote-sensing goals into data-capture pipelines and telemetry requirements.",
-  },
-  {
-    period: "Dec 2025 – 2026",
-    title: "Data Analytics Intern",
-    org: "Happieloop",
-    kind: "Work",
-    body: "Built Python and SQL dashboards and automated data pipelines.",
   },
   {
     period: "Sep 2024 – Jan 2026",
@@ -887,10 +820,8 @@ export const selected: { slug: string; problem: string; metrics: [string, string
 ];
 
 export const now: string[] = [
-  "Launching The Rookery, an 8-week builder programme",
+  "Launching The Rookery, Pattarai's 8-week builder programme",
   "Running GRAIT Club, Pattarai and Idea Cafe on campus",
-  "Building the NDVI payload for CanSat '26",
-  "vgate Phase 2: real strap noise, pending ethics approval",
   "Planning the Speak with Ikigai career conclave",
 ];
 
@@ -945,21 +876,21 @@ export const samples: Sample[] = [
     doc: ["Read the evaluation", "https://github.com/Jos-zenith/nolambur_case#readme"],
   },
   {
-    slug: "vgate",
-    kind: "Pre-registered study",
-    title: "vgate: dropping my own best result",
-    problem: "Heart monitors raise so many false alarms on noisy signal that staff learn to tune them out.",
+    slug: "engineerfit",
+    kind: "Product decision",
+    title: "EngineerFit: scoring the thinking, not the polish",
+    problem: "Capable graduates from tier-2 and tier-3 colleges get filtered out on fluency and pedigree before anyone sees how they think.",
     insight:
-      "My signal-quality gate cut false alarms by 31%, but on settings tuned against the test set. A check written down in advance showed that no fixed setting held up on noise it hadn't seen.",
+      "A recruiter won't act on a score they can't explain, and a student can't improve on one. So the score has to be reproducible: same answers and same role, same result, with the reasons shown.",
     decision:
-      "Shipped v1.0 without the gate and published the failure. Losing a headline number was better than shipping a claim that wouldn't hold up in the field.",
-    verdict: "31% fewer false alarms in-sample, but no fixed cut-off transferred to unseen noise, so v1.0 ships without it.",
+      "Chose an adaptive IRT test over a fixed quiz, so each next question is the one that says most about the candidate, and deterministic vector matching over an opaque ranking model. One engine feeds both the student report and the recruiter dashboard.",
+    verdict: "Explainable over clever: an adaptive test and deterministic matching, so every fit score comes with its reasons.",
     numbers: [
-      ["31%", "fewer false alarms, in-sample"],
-      ["0", "methods that transferred"],
-      ["536,821", "beats matched, C vs Python"],
+      ["6", "signals scored per attempt"],
+      ["2", "surfaces on one engine"],
+      ["0", "black-box rankings"],
     ],
-    doc: ["Read the study", "https://github.com/Jos-zenith/vict#readme"],
+    doc: ["Read the README", "https://github.com/Jos-zenith/engineerfit_#readme"],
   },
 ];
 
@@ -1034,8 +965,6 @@ export type OpsCard = {
   problem: string;
   built: string[];
   numbers: [string, string][];
-  /** How it started, if it started with a "no": what I was turned down for, and what I did instead. */
-  origin?: [string, string];
   /** A public page for the work itself, e.g. the event site. */
   link?: [string, string];
   tone: "yellow" | "blue" | "pink" | "green";
@@ -1046,7 +975,6 @@ export const operations: OpsCard[] = [
   {
     title: "FLAIR 2K26",
     role: "President, GRAIT Club",
-    origin: ["Not chosen as paper-presentation coordinator", "ran the club as President instead"],
     big: "8",
     bigLabel: "sub-events, one symposium",
     problem:
@@ -1067,7 +995,6 @@ export const operations: OpsCard[] = [
   {
     title: "Turbonites EV",
     role: "Team Captain",
-    origin: ["Not selected for the team", "rejoined, took on design and planning, made captain"],
     big: "20+",
     bigLabel: "engineers, 4 disciplines",
     problem: "One season to take an electric car from CAD to the track, on a fixed student budget.",
@@ -1084,7 +1011,7 @@ export const operations: OpsCard[] = [
   },
   {
     title: "The Rookery",
-    role: "Founding Keeper",
+    role: "Founding Keeper · runs under LICET Pattarai",
     big: "25–30",
     bigLabel: "builders per 8-week cohort",
     problem: "Student builders rarely work on a real problem for a real user, so club projects stop at the demo.",
@@ -1108,7 +1035,10 @@ export const operations: OpsCard[] = [
     bigLabel: "module journey",
     problem: "Students and early PhD faculty lacked structured research training.",
     built: ["The nine-module research journey", "The pod model", "The engagement system"],
-    numbers: [["Audience", "Students + early PhD faculty"]],
+    numbers: [
+      ["Audience", "Students + early PhD faculty"],
+      ["Right now", "10 members in ideation"],
+    ],
     tone: "blue",
   },
 ];
@@ -1117,29 +1047,31 @@ export const operations: OpsCard[] = [
 export const operatingLog = {
   rules: [
     {
-      title: "Bias to action",
-      body: "Ship a rough v1 in days, then let the numbers steer. BlastWatch went live with alerts the day after its first commit.",
+      title: "Real, and near me",
+      body: "First question: does this fix a real problem or discomfort for someone close by? Trustify began with a Nolambur resident who lost ₹22.5L, and The Rookery's problems come from local clinics, NGOs and shops.",
     },
     {
-      title: "Ruthless prioritisation",
-      body: "If it doesn't move the primary metric, it waits. Impact Ledger turns that into a gate: no KPI and no tracking event, no ship.",
+      title: "Every project gets a case study",
+      body: "Built from articles, blogs and the people it's for, not from my own assumptions. That's why every project here opens to a written case study.",
     },
     {
-      title: "Owners and deadlines in writing",
-      body: "Many people, one plan. FLAIR's eight sub-events ran on one run-of-show with a named lead for each, and Turbonites ran with one owner per subsystem.",
+      title: "Design thinking, at any cost",
+      body: "Empathise, define, ideate, prototype, test, even when the deadline says skip to the build. Pattarai runs on it, and The Rookery's five stages follow it.",
     },
     {
-      title: "Honest post-mortems",
-      body: "Publish the misses next to the wins. Trustify's model failed on real data and vgate's best result didn't transfer, and both are on the record.",
+      title: "Proper work over a pretty UI",
+      body: "A minimal thing done properly beats a dazzling screen. Trustify's real work is the hold policy, the audit log and publishing where the model failed, not the console.",
     },
   ],
+  /** The line I keep coming back to. */
+  quote: "The universe falls in love with a stubborn heart.",
 };
 
 /** The hero's rotating numbers: one fact each, linking to its evidence. */
 export const heroNumbers: { value: string; strike?: boolean; label: string; tag: string; href: string }[] = [
   { value: "8", label: "Sub-events I brought together under FLAIR 2K26, LICET's flagship technical symposium, for 500+ participants.", tag: "FLAIR 2K26", href: "#operations" },
   { value: "2.7%", label: "Precision a fraud-review queue needs to pay for itself. The model projected 0.4%.", tag: "Trustify", href: "#samples" },
-  { value: "31%", strike: true, label: "My best result, thrown out because it didn't hold up on unseen data.", tag: "vgate", href: "#samples" },
+  { value: "6", label: "Signals EngineerFit scores a candidate on, so a tier-3 graduate is judged on how they think, not where they studied.", tag: "EngineerFit", href: "#samples" },
   { value: "4→3", label: "National rank, 4th to 3rd, the season I captained a 20+ person EV team.", tag: "Turbonites", href: "#operations" },
 ];
 

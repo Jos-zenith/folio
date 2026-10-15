@@ -66,25 +66,41 @@ function VinaViz() {
   );
 }
 
-/** The result I dropped: struck through, with what replaced it. */
-function VgateViz() {
+/** What a resume screen reads against what EngineerFit scores. */
+function EngineerFitViz() {
+  const signals: [string, string][] = [
+    ["Cognitive", "adaptive IRT ability"],
+    ["Domain", "engineering fundamentals"],
+    ["Behavioural", "how they work"],
+    ["Role alignment", "vector match to the job"],
+    ["Career hygiene", "recruiter thresholds"],
+    ["Retention", "likely to stay"],
+  ];
   return (
-    <figure className="viz viz-strike" aria-label="31% fewer false alarms in-sample; 0 methods transferred to unseen noise">
-      <figcaption>Fewer false alarms than raising the threshold</figcaption>
-      <div className="strike-row">
-        <div>
-          <span className="strike-num">31%</span>
-          <small>tuned on the test set</small>
+    <figure className="viz" aria-label="Resume polish, fluency and pedigree replaced by six scored signals">
+      <figcaption>What gets scored instead of the resume</figcaption>
+      <div className="flow">
+        <div className="flow-free">
+          <s>Resume polish</s>
+          <s>Spoken fluency</s>
+          <s>College name</s>
+          <small>what filters tier-2 and tier-3 talent out</small>
         </div>
         <span className="flow-arrow" aria-hidden="true">
           →
         </span>
-        <div>
-          <span className="strike-zero">0</span>
-          <small>methods that held up on unseen noise</small>
-        </div>
+        <ul className="flow-paid">
+          {signals.map(([k, v]) => (
+            <li key={k}>
+              <b>{k}</b>
+              <small>{v}</small>
+            </li>
+          ))}
+        </ul>
       </div>
-      <p className="viz-note">A check written down in advance caught it. v1.0 shipped without the gate.</p>
+      <p className="viz-note">
+        <b>Same answers, same role, same score.</b> Students and recruiters both see why.
+      </p>
     </figure>
   );
 }
@@ -92,7 +108,7 @@ function VgateViz() {
 const viz: Record<string, () => React.JSX.Element> = {
   "operation-nolambur": TrustifyViz,
   vina: VinaViz,
-  vgate: VgateViz,
+  engineerfit: EngineerFitViz,
 };
 
 /** Founder memos as a deck: pick one, see its chart and its quick take. Arrow keys move between tabs. */

@@ -320,6 +320,8 @@ html:not(.motion) .ticker ul[aria-hidden] { display: none; }
 .flow-paid li:nth-child(2) { animation-delay: 0.08s; }
 .flow-paid li:nth-child(3) { animation-delay: 0.16s; }
 .flow-paid li:nth-child(4) { animation-delay: 0.24s; }
+.flow-paid li:nth-child(5) { animation-delay: 0.32s; }
+.flow-paid li:nth-child(6) { animation-delay: 0.4s; }
 .flow-paid li.big { background: var(--signal); border-color: var(--signal); color: var(--on-signal); }
 .flow-paid b { display: block; font-size: 14px; }
 .flow-paid small { font-size: 12px; color: var(--muted); }
@@ -328,11 +330,6 @@ html:not(.motion) .ticker ul[aria-hidden] { display: none; }
   .flow { grid-template-columns: 1fr; }
   .flow-arrow { transform: rotate(90deg); justify-self: center; }
 }
-.strike-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 26px; }
-.strike-num, .strike-zero { display: inline-block; position: relative; font: 800 clamp(64px, 8vw, 104px)/0.95 var(--display); letter-spacing: -0.028em; font-variation-settings: "wdth" 80, "opsz" 96; }
-.strike-num { color: var(--faint); }
-.strike-num::after { content: ""; position: absolute; left: -6%; right: -6%; top: 50%; height: 7px; border-radius: 4px; background: var(--amber); transform: rotate(-9deg); transform-origin: left center; animation: strike 0.6s 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-.strike-row small { display: block; max-width: 22ch; font-size: 13px; color: var(--muted); }
 
 /* ---------- throw me a problem ---------- */
 .picker { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; box-shadow: var(--shadow); overflow: hidden; }
@@ -440,10 +437,6 @@ html:not(.motion) .ticker ul[aria-hidden] { display: none; }
   .wall-item:nth-child(even) { border-right: 0; }
 }
 @media (max-width: 560px) { .wall { grid-template-columns: 1fr; } .wall-item { padding-left: 0 !important; border-right: 0; } }
-.wall-origin { margin-top: 12px; padding: 10px 12px; border-left: 3px solid var(--ink-amber); border-radius: 0 8px 8px 0; background: rgba(245, 158, 11, 0.08); font-size: 14px; line-height: 1.5; color: var(--ink-text); }
-.wall-origin span { display: block; margin-bottom: 2px; font: 600 10.5px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-amber); }
-.wall-origin s { color: var(--ink-muted); text-decoration: line-through 2px; text-decoration-color: transparent; transition: text-decoration-color 0.6s 0.5s; }
-.wall-item.in .wall-origin s, html:not(.motion) .wall-origin s { text-decoration-color: var(--ink-amber); }
 
 /* ---------- how I operate ---------- */
 .rules { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
@@ -453,6 +446,9 @@ html:not(.motion) .ticker ul[aria-hidden] { display: none; }
 .rules p { margin-top: 10px; font-size: 15px; color: var(--muted); }
 @media (max-width: 960px) { .rules { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 520px) { .rules { grid-template-columns: 1fr; } }
+.motto { margin: clamp(48px, 7vw, 80px) 0 0; padding-left: clamp(16px, 3vw, 28px); border-left: 3px solid var(--signal); }
+.motto blockquote { margin: 0; max-width: 22ch; font: 800 clamp(30px, 4.4vw, 56px)/1 var(--display); letter-spacing: -0.022em; font-variation-settings: "wdth" 90; }
+.motto figcaption { margin-top: 14px; font: 600 11.5px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
 
 /* ---------- project index ---------- */
 .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
