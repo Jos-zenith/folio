@@ -6,7 +6,6 @@ import CompSlider from "./CompSlider";
 import Pipeline from "./Pipeline";
 
 const captions: Record<string, string> = {
-  "turbonites-ev": "Test day. Months of CAD, one lap at a time.",
   parkintoday: "The ParkinToday mark: a P that is also a pin.",
   "mars-rover": "Sealed body, first CAD pass.",
 };

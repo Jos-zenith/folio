@@ -65,7 +65,7 @@ function MoneyTrail() {
         <text className="trail-lbl" x="330" y="136" textAnchor="middle">layer 2</text>
         <text className="trail-lbl" x="470" y="112" textAnchor="middle">cash-out</text>
       </svg>
-      <figcaption className="trail-cap">Instalments under the ₹1 lakh cap, forwarded in minutes. Orange: held before payout.</figcaption>
+      <figcaption className="trail-cap">Instalments under the ₹1 lakh cap, forwarded in minutes. Green: held before payout.</figcaption>
     </figure>
   );
 }
@@ -93,7 +93,7 @@ export default function Home() {
       {/* ============ HERO ============ */}
       <section className="hero wrap" id="top" aria-labelledby="hero-name">
         <div className="hero-main">
-          <span className="eyebrow">
+          <span className="eyebrow status">
             <i className="dot" aria-hidden="true" />
             Open to {profile.seeking}
           </span>
@@ -145,7 +145,7 @@ export default function Home() {
         <SectionHead
           num="01"
           label="Founder memos"
-          title="Four times the numbers changed the plan."
+          title="Three times the numbers changed the plan."
           lede="Most founder's-office work is deciding what not to do. Pick a memo: the chart, the quick take, and the document behind it."
         />
         <div data-reveal>
@@ -237,7 +237,7 @@ export default function Home() {
             num="04"
             label="Operations"
             title="Teams, budgets and deadlines I've run."
-            lede="Founder's-office work from the plan to the day itself. Open any card for what I built."
+            lede="Founder's-office work from the plan to the day itself. Two of these began with a “no”. Open any card for what I built."
           />
           <div className="wall">
             {operations.map((o) => (
@@ -250,7 +250,18 @@ export default function Home() {
                   {o.title}
                   <small>{o.role}</small>
                 </h3>
+                {o.origin && (
+                  <p className="wall-origin">
+                    <span>Started with a no</span>
+                    <s>{o.origin[0]}</s> → {o.origin[1]}
+                  </p>
+                )}
                 <p className="wall-problem">{o.problem}</p>
+                {o.link && (
+                  <a className="wall-link" href={o.link[1]} target="_blank" rel="noopener">
+                    {o.link[0]} ↗
+                  </a>
+                )}
                 <details>
                   <summary>What I built</summary>
                   <ul>
@@ -264,19 +275,6 @@ export default function Home() {
                 </details>
               </article>
             ))}
-          </div>
-
-          <div className="nos" data-reveal>
-            <h3 className="nos-h">Every &ldquo;no&rdquo; became a result.</h3>
-            <ol>
-              {operatingLog.log.map((l) => (
-                <li key={l.gap} data-reveal>
-                  <s>{l.gap}</s>
-                  <span className="nos-move">{l.move}</span>
-                  <b>{l.result}</b>
-                </li>
-              ))}
-            </ol>
           </div>
         </div>
       </section>

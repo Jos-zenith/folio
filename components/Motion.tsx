@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 const NUM = /^(\D*?)(\d[\d,]*(?:\.\d+)?)(\D*)$/;
 
@@ -31,13 +31,12 @@ function countUp(el: HTMLElement) {
 }
 
 /**
- * Site-wide motion: a reading-progress bar, reveal-on-scroll for [data-reveal],
+ * Site-wide motion: the masthead's reading-progress rule, reveal-on-scroll for [data-reveal],
  * and count-up for [data-count]. Everything is off under prefers-reduced-motion,
  * and the server-rendered text is always the final value.
  */
 export default function Motion() {
   const pathname = usePathname();
-  const bar = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let raf = 0;
@@ -46,7 +45,8 @@ export default function Motion() {
       raf = requestAnimationFrame(() => {
         const h = document.documentElement;
         const max = h.scrollHeight - h.clientHeight;
-        if (bar.current) bar.current.style.transform = `scaleX(${max > 0 ? h.scrollTop / max : 0})`;
+        const bar = document.getElementById("read-progress");
+        if (bar) bar.style.transform = `scaleX(${max > 0 ? h.scrollTop / max : 0})`;
       });
     };
     onScroll();
@@ -70,15 +70,12 @@ export default function Motion() {
       return;
     }
 
-    // Numbers below the fold start at zero; ones already on screen stay put.
+    // The text always holds the real value; the count-up only plays once a number is on screen.
+    // Screen readers get the final value from aria-label, never the in-between digits.
     counts.forEach((el) => {
       el.dataset.final = el.textContent ?? "";
-      if (el.getBoundingClientRect().top < window.innerHeight) {
-        el.dataset.done = "1";
-        return;
-      }
-      const m = el.dataset.final.match(NUM);
-      if (m) el.textContent = m[1] + "0" + m[3];
+      el.setAttribute("aria-label", el.dataset.final);
+      if (el.getBoundingClientRect().top < window.innerHeight) el.dataset.done = "1";
     });
 
     const io = new IntersectionObserver(
@@ -101,5 +98,5 @@ export default function Motion() {
     return () => io.disconnect();
   }, [pathname]);
 
-  return <div className="progress" ref={bar} aria-hidden="true" />;
+  return null;
 }

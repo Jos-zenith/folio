@@ -42,7 +42,7 @@ export default function Resume() {
         <p className="r-summary">
           I take a messy problem from the first question to a shipped, measured result. Co-founder and CTO of a smart-parking
           startup, captain of a 20+ person EV team that placed 3rd nationally, president of a club that ran a 500-person
-          symposium from a ₹0 budget, and builder of {live} live products, each with a written case study. I do the arithmetic
+          symposium with 8 sub-events (FLAIR 2K26), and builder of {live} live products, each with a written case study. I do the arithmetic
           before the plan and publish what didn&apos;t work.
         </p>
 

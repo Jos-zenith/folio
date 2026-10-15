@@ -1,11 +1,10 @@
-export type Category = "Operations & Strategy" | "Money & Trust" | "Field Problems" | "Machines";
+export type Category = "Money & Trust" | "Field Problems" | "Machines";
 
-export type Status = "Live" | "Shipped" | "Work sample" | "Prototype" | "Building" | "Award";
+export type Status = "Live" | "Shipped" | "Prototype" | "Building" | "Award";
 
 export const statusClass: Record<Status, string> = {
   Live: "ok",
   Shipped: "ok",
-  "Work sample": "blue",
   Award: "stamp",
   Prototype: "blue",
   Building: "warn",
@@ -64,45 +63,6 @@ export const profile = {
 };
 
 export const projects: Project[] = [
-  {
-    slug: "weekday-desk",
-    title: "Weekday Scheduling Desk",
-    tagline: "500 interview requests a night, two interns, one playbook",
-    category: "Operations & Strategy",
-    year: "2026",
-    status: "Work sample",
-    featured: true,
-    role: "Solo: capacity analysis, process design, the intern sheet, tests, write-up",
-    summary:
-      "My response to Weekday's scheduling brief: get 80% of about 500 nightly interview requests booked within 24 hours, with two college interns and a process that needs no judgement calls. I built the desk they work from, and the arithmetic showed the target can't be reached by phone alone.",
-    problem:
-      "About 500 interview requests from 100 partners land at 19:51 every evening, and the promise is 400 of them in a calendar by 19:51 the next day. Nobody can be called before 10:00, so 14 of the 24 hours are dead time. The people making the calls are two interns, and candidates miss calls, ignore email, skip WhatsApp, or agree and then forget.",
-    decisions: [
-      "Did the capacity arithmetic before designing anything. 426 people sit behind the 500 requests and two interns get about 210 tries, so even if every call books they top out near 49%. 80% needs candidates booking on their own, more people, or both.",
-      "Counted only a time in the partner's calendar as scheduled. A sent booking link never counts, which keeps first-try success honest at 40% instead of 45%.",
-      "Called people, not requests: one row per person with all their open requests, because dialling per request wastes one call in seven.",
-      "Ranked the list by chance of booking and time left instead of first in, first out. When 500 requests arrive in the same minute, FIFO is just a random order.",
-      "Recommended the cheapest option first. The call desk works tomorrow and produces the measurements the other options depend on: pilot an evening WhatsApp nudge on days 3–5, decide on more interns on day 6 with measured numbers.",
-    ],
-    highlights: [
-      "An Excel desk where every judgement lives in a formula. Interns start at row 1, click Call, and log one line per conversation",
-      "Pre-typed WhatsApp follow-ups that come back after a fixed wait, up to three tries, never outside 10:00–21:00",
-      "Every request keeps one ID from the partner's sheet to the booking, and duplicates and bad contacts are flagged on intake",
-      "Priced the gap at about ₹8,100 of expected fee per scheduled interview, or ₹3.6 lakh a day at risk in the central scenario, with the least certain input named as the first to replace with real data",
-      "29 request-tracking checks, a test that rebuilds the model from raw data for seven scenarios, and a bot that works a simulated day through the sheet",
-    ],
-    facts: [
-      ["Volume", "≈ 500 requests / night · 100 partners"],
-      ["Capacity", "≈ 210 tries, two interns"],
-      ["Ceiling by phone", "49% (bounds 42–56%)"],
-      ["Planning estimate", "≈ 45%"],
-      ["Value at risk", "≈ ₹3.6 L / day (scenario)"],
-      ["Tests", "29 tracking checks · 7 scenarios"],
-    ],
-    stack: ["Excel", "Python", "Scenario modelling", "Simulation"],
-    code: "https://github.com/Jos-zenith/weekday",
-    docs: [["Read the plan (PDF)", "https://github.com/Jos-zenith/weekday/blob/main/Weekday%20Scheduling%20Plan.pdf"]],
-  },
   {
     slug: "operation-nolambur",
     title: "Trustify",
@@ -472,31 +432,6 @@ export const projects: Project[] = [
     code: "https://github.com/Jos-zenith/mini-Emotion-Cipher",
   },
   {
-    slug: "phishshield",
-    title: "PhishShield",
-    tagline: "Scam awareness where scams actually arrive",
-    category: "Money & Trust",
-    year: "2026",
-    status: "Building",
-    role: "Product and full-stack developer",
-    summary:
-      "Checks links and messages for phishing and lets people report scams straight from WhatsApp.",
-    problem:
-      "Most scam links reach people on WhatsApp, and few will install a separate app just to check a link.",
-    decisions: [
-      "Took reports over WhatsApp via Twilio instead of asking people to switch apps.",
-      "Combined reputation feeds (VirusTotal, PhishTank) with LLM analysis of the message text.",
-      "Runs in a safe local-only mode until the backend schema is deployed.",
-    ],
-    highlights: ["URL and message scanning", "Training progress and leaderboard", "Threat reports"],
-    facts: [
-      ["Channels", "Web + WhatsApp"],
-      ["Signals", "VirusTotal · PhishTank · LLM"],
-    ],
-    stack: ["Next.js", "Supabase", "Anthropic API", "Twilio", "VirusTotal"],
-    code: "https://github.com/Jos-zenith/phishshield",
-  },
-  {
     slug: "victori",
     title: "HCCMS",
     tagline: "Household carbon-credit monitoring",
@@ -661,41 +596,6 @@ export const projects: Project[] = [
     imageAlt: "ParkinToday logo: a P shaped like a location pin",
   },
   {
-    slug: "turbonites-ev",
-    title: "Turbonites EV",
-    tagline: "Electric four-wheeler, national competition",
-    category: "Machines",
-    year: "2025",
-    status: "Award",
-    featured: true,
-    role: "Team Captain: 20+ engineers across 4 disciplines",
-    summary:
-      "Ran a 20+ person team across mechanical, electrical, electronics and IT to design, build and race an electric four-wheeler at SAEISS EFWDC, on a student budget.",
-    problem:
-      "Building a road-worthy EV in one competition cycle means four engineering disciplines working as one team, with a fixed budget and a date that doesn't move.",
-    decisions: [
-      "Ran the build in Agile sprints with one named owner per subsystem, tracked in Jira, so integration problems surfaced at sprint review instead of on test day.",
-      "Owned the budget and the procurement plan, ordering against the build schedule so parts were in hand before the sprint that needed them.",
-      "Kept mechanical, electrical, electronics and IT aligned through a shared integration review, with decisions written down and an owner on each.",
-      "Worked on vehicle design and dynamics alongside planning, and mentored juniors on embedded systems so the next season starts ahead.",
-    ],
-    highlights: [
-      "3rd place nationally, Chairman's Special Category (EFWDC '25)",
-      "4th place and ₹10,000 at EFWDC '24",
-      "Moved from 4th to 3rd nationally in the season I captained",
-    ],
-    facts: [
-      ["Team", "20+ engineers"],
-      ["Disciplines", "4"],
-      ["Cadence", "Agile sprints · Jira"],
-      ["Result '25", "3rd · National"],
-      ["Result '24", "4th · ₹10,000"],
-    ],
-    stack: ["NX CAD", "AutoCAD", "Vehicle dynamics", "Embedded systems", "Jira"],
-    image: "/img/ev-track-day.jpg",
-    imageAlt: "The Turbonites electric four-wheeler on test day, two drivers in helmets, team watching",
-  },
-  {
     slug: "gesture-wheelchair",
     title: "Gesture Wheelchair",
     tagline: "Hand-gesture controlled mobility",
@@ -710,21 +610,6 @@ export const projects: Project[] = [
     facts: [["Result", "1st · Envision '23"]],
     stack: ["Arduino", "Accelerometer", "Motor drivers"],
     code: "https://github.com/Jos-zenith/Gesture-controlled-Wheelchair",
-  },
-  {
-    slug: "glaucoma-monitor",
-    title: "Glaucoma Pressure Monitor",
-    tagline: "Low-cost eye-pressure measurement",
-    category: "Machines",
-    year: "",
-    status: "Award",
-    role: "Hardware and prototyping",
-    summary: "An IoT device that measures eye pressure to help screen for glaucoma early.",
-    problem: "Tonometry equipment is expensive and rarely available outside urban hospitals.",
-    decisions: ["Sensor-based pressure reading on a microcontroller", "Designed for low-cost screening camps"],
-    highlights: ["2nd place at INDIA@2047"],
-    facts: [["Result", "2nd · INDIA@2047"]],
-    stack: ["Arduino", "Pressure sensor", "IoT"],
   },
   {
     slug: "mars-rover",
@@ -744,88 +629,9 @@ export const projects: Project[] = [
     image: "/img/rover-cad.jpg",
     imageAlt: "CAD render of the sealed rover body",
   },
-  {
-    slug: "karuvelam",
-    title: "Karuvelam",
-    tagline: "Invasive weed → bio-preservative",
-    category: "Field Problems",
-    year: "2026",
-    status: "Live",
-    role: "Concept and web",
-    summary: "A venture concept that turns the invasive Seemai Karuvelam tree into commercial bio-preservatives.",
-    problem: "Seemai Karuvelam drains groundwater across Tamil Nadu, and clearing it costs money without earning any.",
-    decisions: ["Gave the clearing work a revenue stream", "Presented it as a product story as well as a research project"],
-    highlights: ["Live product site"],
-    facts: [["Region", "Tamil Nadu"]],
-    stack: ["React", "Vite"],
-    live: "https://karuvelam.vercel.app/",
-    code: "https://github.com/Jos-zenith/karuvelam",
-  },
-  {
-    slug: "jalodayam",
-    title: "Jalodayam",
-    tagline: "Village water data for community action",
-    category: "Field Problems",
-    year: "2026",
-    status: "Live",
-    role: "Product and front-end",
-    summary: "Turns village water data into a shared tool that Kerala communities can act on.",
-    problem: "Water data sits in reports that the people most affected never see.",
-    decisions: ["Designed for the community first and officials second", "Built on simple, readable visuals"],
-    highlights: ["Live deployment"],
-    facts: [["Region", "Kerala"]],
-    stack: ["TypeScript", "React"],
-    live: "https://e-jalodayam.vercel.app/",
-    code: "https://github.com/Jos-zenith/water-management",
-  },
-  {
-    slug: "trident3d",
-    title: "Trident3D",
-    tagline: "Rural climate-risk intelligence",
-    category: "Field Problems",
-    year: "2026",
-    status: "Building",
-    role: "Architecture and roadmap",
-    summary:
-      "An open, low-cost climate-risk stack for rural India that serves farmers, rural lenders and planners from one data layer.",
-    problem: "Climate and agri-risk data is scattered across sources, and none of it arrives in a form that helps a decision.",
-    decisions: [
-      "Three layers: data integration APIs, hazard forecasting, and dashboards with alerts",
-      "Anchored on DiCRA open data",
-      "3D terrain maps and printable STL outputs",
-    ],
-    highlights: ["Unified dataset catalogue endpoint", "Hazard and advisory API contracts"],
-    facts: [["Users", "Farmers · lenders · planners"]],
-    stack: ["FastAPI", "Python", "Web 3D"],
-    code: "https://github.com/Jos-zenith/Trident-D3D",
-  },
-  {
-    slug: "ride-hailing-device",
-    title: "Ride-Hailing Companion",
-    tagline: "A device for drivers and passengers to talk",
-    category: "Machines",
-    year: "",
-    status: "Award",
-    role: "Embedded design and prototyping",
-    summary: "An in-cab device that lets ride-hailing drivers and passengers communicate without phones or shared language.",
-    problem: "Drivers and passengers often don't share a language, and drivers shouldn't be reading a phone while driving.",
-    decisions: ["A dedicated in-cab device instead of another app screen", "Simple, glanceable interaction for the driver"],
-    highlights: ["4th place at ImpactX 2.0"],
-    facts: [["Result", "4th · ImpactX 2.0"]],
-    stack: ["Embedded C", "IoT", "Microcontroller"],
-  },
 ];
 
 export const chapters: { id: string; num: string; name: Category; title: string; intro: string; note: string; featured: string }[] = [
-  {
-    id: "ops",
-    num: "0",
-    name: "Operations & Strategy",
-    title: "Do the arithmetic before the plan.",
-    intro: "Capacity models, process design and strategy memos: the founder's-office work behind a product or an operation.",
-    note: "the numbers decide",
-    featured: "weekday-desk",
-  },
   {
     id: "money",
     num: "1",
@@ -854,7 +660,7 @@ export const chapters: { id: string; num: string; name: Category; title: string;
     intro:
       "Before I wrote product specs I was wiring motors and cutting chassis. You can't patch a car after the weld, so you think harder up front. I bring that habit to software.",
     note: "grease under the fingernails",
-    featured: "turbonites-ev",
+    featured: "parkintoday",
   },
 ];
 
@@ -895,7 +701,7 @@ export const experience: Role[] = [
     org: "GRAIT Club, Dept. of IT, LICET",
     kind: "Leadership",
     current: true,
-    body: "Ran a national-level symposium from a ₹0 starting budget: 8 events, 500+ participants. Negotiated sponsors and vendors, ran the registration funnel and held every event lead to the timeline.",
+    body: "Led FLAIR 2K26, LICET's flagship technical symposium: 8 sub-events and 500+ participants. Coordinated event leads, coordinators, judges and sponsors on one run-of-show, and ran the registration funnel.",
   },
   {
     period: "2026 – now",
@@ -947,14 +753,6 @@ export const experience: Role[] = [
     body: "Built Python and SQL dashboards and automated data pipelines.",
   },
   {
-    period: "Oct 2025 – now",
-    title: "Founder",
-    org: "Panjaayathu Wellness",
-    kind: "Venture",
-    current: true,
-    body: "Building a mental-health platform based on CBT frameworks for the 1 : 7,500 psychologist-to-student gap in Indian universities.",
-  },
-  {
     period: "Sep 2024 – Jan 2026",
     title: "Co-Founder & CTO",
     org: "ParkinToday",
@@ -1000,13 +798,9 @@ export const awards: { place: string; event: string; detail: string }[] = [
 ];
 
 export const learning: { title: string; detail: string; state: "done" | "active" }[] = [
-  { title: "Cross-Border Payments", detail: "SWIFT, correspondent banking, Nostro/Vostro, settlement, FX, ISO 20022", state: "active" },
-  { title: "Postman API Student Expert", detail: "Certification practice tests", state: "active" },
-  { title: "Hooked, by Nir Eyal", detail: "Reading: habit-forming product design", state: "active" },
   { title: "Mixpanel", detail: "Product analytics: funnels, retention, cohorts", state: "done" },
   { title: "B2B SaaS Metrics 2026", detail: "ARR, churn, CAC, LTV, unit economics", state: "done" },
   { title: "HubSpot Inbound + Sales", detail: "HubSpot Academy", state: "done" },
-  { title: "Digital Product Management", detail: "Coursera", state: "done" },
   { title: "AI for Product Managers", detail: "Alison", state: "done" },
   { title: "PSPO I preparation", detail: "Udemy", state: "done" },
   { title: "Becoming an Agile Business Analyst", detail: "Udemy", state: "done" },
@@ -1098,7 +892,6 @@ export const now: string[] = [
   "Building the NDVI payload for CanSat '26",
   "vgate Phase 2: real strap noise, pending ethics approval",
   "Planning the Speak with Ikigai career conclave",
-  "Studying cross-border payments and ISO 20022",
 ];
 
 export type Sample = {
@@ -1117,23 +910,6 @@ export type Sample = {
 
 /** Written work where the arithmetic changed the plan. Each links to the document itself. */
 export const samples: Sample[] = [
-  {
-    slug: "weekday-desk",
-    kind: "Ops plan · capacity model",
-    title: "Weekday: 500 interviews a night, two interns",
-    problem: "Book 80% of about 500 nightly interview requests within 24 hours, using two interns and a process with no judgement calls.",
-    insight:
-      "It looks like a process problem, but it's capacity. Two interns get about 210 tries before the deadline, so even if every call books they top out near 49%.",
-    decision:
-      "Run the zero-cost call desk from day 1 to measure the real rates, pilot an evening WhatsApp nudge on days 3–5, and decide on hiring on day 6. The gap is worth about ₹3.6 lakh of expected fees a day.",
-    verdict: "Showed a 49% ceiling by phone, and built the desk as the experiment that finds the fix.",
-    numbers: [
-      ["49%", "ceiling by phone"],
-      ["≈ 210", "tries before the deadline"],
-      ["₹3.6 L", "expected fee at risk a day"],
-    ],
-    doc: ["Read the plan (PDF)", "https://github.com/Jos-zenith/weekday/blob/main/Weekday%20Scheduling%20Plan.pdf"],
-  },
   {
     slug: "vina",
     kind: "Strategy memo + 3 PRDs",
@@ -1258,32 +1034,40 @@ export type OpsCard = {
   problem: string;
   built: string[];
   numbers: [string, string][];
+  /** How it started, if it started with a "no": what I was turned down for, and what I did instead. */
+  origin?: [string, string];
+  /** A public page for the work itself, e.g. the event site. */
+  link?: [string, string];
   tone: "yellow" | "blue" | "pink" | "green";
 };
 
 /** Founder's-office work: problem, my role, what I built, and the numbers. */
 export const operations: OpsCard[] = [
   {
-    title: "GRAIT Club symposium",
-    role: "President",
-    big: "500+",
-    bigLabel: "participants",
-    problem: "A national-level symposium had to be run by students, starting from a ₹0 budget.",
+    title: "FLAIR 2K26",
+    role: "President, GRAIT Club",
+    origin: ["Not chosen as paper-presentation coordinator", "ran the club as President instead"],
+    big: "8",
+    bigLabel: "sub-events, one symposium",
+    problem:
+      "LICET's flagship technical symposium: eight sub-events on one day, each with its own coordinators, judges and format, and all of it had to feel like one happy, useful day for 500+ participants.",
     built: [
-      "Sponsor and vendor negotiations that funded and supplied the event",
+      "The line-up: prompt engineering, research presentations, UI design, a debugging relay, a startup pitch, a digital treasure hunt and two quick-fire games",
+      "One run-of-show coordinating event leads, coordinators, judges, sponsors and the team that built the site, with a named owner and a deadline for every sub-event",
       "An outreach-to-registration funnel across colleges, tuned as sign-ups came in",
-      "A run-of-show with a deadline for every event lead, held to the day",
     ],
     numbers: [
-      ["Events", "8"],
+      ["Sub-events", "8"],
       ["Participants", "500+"],
-      ["Starting budget", "₹0"],
+      ["Date", "8 Aug 2026"],
     ],
+    link: ["flair2k26.live", "https://www.flair2k26.live/"],
     tone: "yellow",
   },
   {
     title: "Turbonites EV",
     role: "Team Captain",
+    origin: ["Not selected for the team", "rejoined, took on design and planning, made captain"],
     big: "20+",
     bigLabel: "engineers, 4 disciplines",
     problem: "One season to take an electric car from CAD to the track, on a fixed student budget.",
@@ -1301,8 +1085,8 @@ export const operations: OpsCard[] = [
   {
     title: "The Rookery",
     role: "Founding Keeper",
-    big: "8",
-    bigLabel: "week builder programme",
+    big: "25–30",
+    bigLabel: "builders per 8-week cohort",
     problem: "Student builders rarely work on a real problem for a real user, so club projects stop at the demo.",
     built: [
       "The programme: five stages from define to showcase, cohorts of 25–30 in cross-college huddles of 4–5",
@@ -1329,47 +1113,8 @@ export const operations: OpsCard[] = [
   },
 ];
 
+/** Operating principles, each backed by something on this site. */
 export const operatingLog = {
-  title: "I don't wait for a title to start the work.",
-  opening:
-    "Most of what you see here started without a title, a budget or anyone asking. When something is missing or broken, I scope it, find the people, ship it and measure it. Here's that pattern as a log.",
-  log: [
-    {
-      gap: "Not selected for Turbonites.",
-      move: "Rejoined, took on vehicle design and planning, and was made captain.",
-      result: "20+ engineers · 4th → 3rd nationally",
-    },
-    {
-      gap: "Not chosen as paper-presentation coordinator.",
-      move: "Ran GRAIT Club as President instead.",
-      result: "8-event symposium · 500+ participants · ₹0 start",
-    },
-    {
-      gap: "Left out of a startup's team.",
-      move: "Came back as its co-founder, owning roadmap and tech.",
-      result: "Concept to launch · investor pitches",
-    },
-    {
-      gap: "No office-bearer seat in the ED Cell or MAD Club.",
-      move: "Took on bigger roles in inter-college communities.",
-      result: "Speak With Ikigai, FlutterFlow and more",
-    },
-    {
-      gap: "No structured research training for students or early PhD faculty.",
-      move: "Designed Idea Cafe under IIC.",
-      result: "9 modules · pod model · engagement system",
-    },
-    {
-      gap: "A brief asked two interns to schedule 80% of 500 requests a night.",
-      move: "Did the capacity maths first, then built the desk as the experiment that finds the real fix.",
-      result: "49% ceiling by phone · 3-option rollout plan",
-    },
-    {
-      gap: "No way to prove whether a feature worked.",
-      move: "Built a release gate: no KPI and no events means no ship.",
-      result: "Impact Ledger · kill switch on harm",
-    },
-  ],
   rules: [
     {
       title: "Bias to action",
@@ -1380,21 +1125,19 @@ export const operatingLog = {
       body: "If it doesn't move the primary metric, it waits. Impact Ledger turns that into a gate: no KPI and no tracking event, no ship.",
     },
     {
-      title: "Frugal by default",
-      body: "Start from what's free. A ₹0 budget became an 8-event, 500-person symposium, and BlastWatch covers about 730 districts on a free weather tier.",
+      title: "Owners and deadlines in writing",
+      body: "Many people, one plan. FLAIR's eight sub-events ran on one run-of-show with a named lead for each, and Turbonites ran with one owner per subsystem.",
     },
     {
       title: "Honest post-mortems",
       body: "Publish the misses next to the wins. Trustify's model failed on real data and vgate's best result didn't transfer, and both are on the record.",
     },
   ],
-  lesson: "Find the gap, put scope and owners in writing, ship, measure, and publish what didn't work. Then do it again, faster.",
 };
 
 /** The hero's rotating numbers: one fact each, linking to its evidence. */
 export const heroNumbers: { value: string; strike?: boolean; label: string; tag: string; href: string }[] = [
-  { value: "49%", label: "The most two interns could ever book by phone. So I changed the question.", tag: "Weekday memo", href: "#samples" },
-  { value: "₹0", label: "Starting budget. It became an 8-event symposium for 500+ people.", tag: "GRAIT Club", href: "#operations" },
+  { value: "8", label: "Sub-events I brought together under FLAIR 2K26, LICET's flagship technical symposium, for 500+ participants.", tag: "FLAIR 2K26", href: "#operations" },
   { value: "2.7%", label: "Precision a fraud-review queue needs to pay for itself. The model projected 0.4%.", tag: "Trustify", href: "#samples" },
   { value: "31%", strike: true, label: "My best result, thrown out because it didn't hold up on unseen data.", tag: "vgate", href: "#samples" },
   { value: "4→3", label: "National rank, 4th to 3rd, the season I captained a 20+ person EV team.", tag: "Turbonites", href: "#operations" },
@@ -1405,6 +1148,7 @@ export const ticker: string[] = [
   "Co-founder & CTO · ParkinToday",
   "3rd nationally · SAEISS EFWDC '25",
   "President · GRAIT Club",
+  "8 sub-events · FLAIR 2K26",
   "Founding Keeper · The Rookery",
   "APM Intern · Upskillmate",
   "1st · Envision '23",

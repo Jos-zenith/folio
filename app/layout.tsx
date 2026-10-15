@@ -11,7 +11,7 @@ const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["500", "600", "700"], 
 const display = Bricolage_Grotesque({ subsets: ["latin"], axes: ["wdth", "opsz"], variable: "--font-display" });
 
 const description =
-  "Zenith Joshua J: operator and product builder from Chennai, open to Founder's Office and APM roles. Capacity models and strategy memos, a 20+ person EV team, a 500-person symposium, and live products in fintech, agriculture and hardware.";
+  "Zenith Joshua J: operator and product builder from Chennai, open to Founder's Office and APM roles. Capacity models and strategy memos, a 20+ person EV team, an 8-event technical symposium, and live products in fintech, agriculture and hardware.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.site),
@@ -51,6 +51,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }} />
       </head>
       <body>
+        <div className="guides" aria-hidden="true">
+          <div className="wrap">
+            <i />
+            <i />
+            <i />
+            <i />
+            <i />
+            <i />
+          </div>
+        </div>
         <Nav />
         {children}
         <CommandPalette />

@@ -4,31 +4,6 @@ import Link from "next/link";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { samples } from "@/lib/data";
 
-/** Capacity meter: what two interns can reach by phone against the 80% promise. */
-function WeekdayViz() {
-  return (
-    <figure className="viz" aria-label="Share of 500 requests booked: ceiling by phone 49%, target 80%">
-      <figcaption>Share of the 500 nightly requests booked within 24 h</figcaption>
-      <div className="meter">
-        <div className="meter-fill" style={{ width: "49%" }} title="Ceiling by phone: 49%" />
-        <div className="meter-gap" style={{ left: "49%", width: "31%" }} title="Gap to target: 31 points" />
-        <div className="meter-mark" style={{ left: "80%" }} title="Target: 80%" />
-      </div>
-      <div className="meter-labels">
-        <span style={{ left: "49%" }}>
-          <b>49%</b> ceiling, even if every call books
-        </span>
-        <span className="right" style={{ left: "80%" }}>
-          <b>80%</b> promised
-        </span>
-      </div>
-      <p className="viz-note">
-        The 31-point gap can&apos;t be closed by calling harder. It needs self-booking, more people, or both.
-      </p>
-    </figure>
-  );
-}
-
 /** Precision meter on a 0–3% scale: what the model projects against what pays. */
 function TrustifyViz() {
   return (
@@ -115,7 +90,6 @@ function VgateViz() {
 }
 
 const viz: Record<string, () => React.JSX.Element> = {
-  "weekday-desk": WeekdayViz,
   "operation-nolambur": TrustifyViz,
   vina: VinaViz,
   vgate: VgateViz,
@@ -171,7 +145,7 @@ export default function MemoDeck() {
             <dt>Problem</dt>
             <dd>{s.problem}</dd>
           </div>
-          <div>
+          <div className="missed">
             <dt>What&apos;s usually missed</dt>
             <dd>{s.insight}</dd>
           </div>
