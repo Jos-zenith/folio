@@ -1,19 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PrintButton from "@/components/PrintButton";
-import { awards, experience, profile, projects, samples, selected, skills } from "@/lib/data";
+import { profile, resume } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Résumé",
   description: `${profile.name}: résumé for ${profile.seeking}.`,
 };
 
-const bare = (url: string) => url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
-
-/** One printable page, generated from the same data as the site so the two never drift apart. */
+/** One printable page. The wording lives in `resume` in lib/data.ts. */
 export default function Resume() {
-  const roles = experience.filter((r) => r.kind !== "Education" && !r.minor);
-  const live = projects.filter((p) => p.status === "Live").length;
+  const { education: edu } = resume;
 
   return (
     <main className="resume wrap">
@@ -31,101 +28,90 @@ export default function Resume() {
             </p>
           </div>
           <p className="r-contact">
-            <a href={`mailto:${profile.email}`}>{profile.email}</a>
             <a href={`tel:${profile.phoneRaw}`}>{profile.phone}</a>
-            <a href={profile.site}>{bare(profile.site)}</a>
-            <a href={profile.linkedin}>{bare(profile.linkedin)}</a>
-            <a href={profile.github}>{bare(profile.github)}</a>
+            <a href={`mailto:${profile.email}`}>{profile.email}</a>
+            <span className="r-links">
+              <a href={profile.site}>Portfolio</a> · <a href={profile.linkedin}>LinkedIn</a> ·{" "}
+              <a href={profile.github}>GitHub</a> · <a href={profile.leetcode}>LeetCode</a>
+            </span>
           </p>
         </header>
 
-        <p className="r-summary">
-          I take a messy problem from the first question to a shipped, measured result. Co-founder and CTO of a smart-parking
-          startup, captain of a 20+ person EV team that placed 3rd nationally, president of a club that ran a 500-person
-          symposium with 8 sub-events (FLAIR 2K26), and builder of {live} live products, each with a written case study. I do the arithmetic
-          before the plan and publish what didn&apos;t work.
-        </p>
-
         <section>
-          <h2>Work samples</h2>
-          <ul className="r-list">
-            {samples.map((s) => {
-              const p = projects.find((x) => x.slug === s.slug)!;
-              return (
-                <li key={s.slug}>
-                  <b>{p.title}</b> <span className="r-kind">· {s.kind}</span>
-                  <p>
-                    {s.problem} {s.verdict}
-                  </p>
-                </li>
-              );
-            })}
-          </ul>
+          <h2>Summary</h2>
+          <p>{resume.summary}</p>
         </section>
 
         <section>
-          <h2>Experience and leadership</h2>
+          <h2>Experience</h2>
           <ul className="r-list">
-            {roles.map((r) => (
+            {resume.roles.map((r) => (
               <li key={r.title + r.org}>
                 <div className="r-line">
                   <b>
                     {r.title}, {r.org}
+                    {r.note && <span className="r-kind"> ({r.note})</span>}
                   </b>
                   <span>{r.period}</span>
                 </div>
-                <p>{r.body}</p>
+                <ul className="r-bullets">
+                  {r.bullets.map((b) => (
+                    <li key={b}>{b}</li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>
-        </section>
-
-        <section>
-          <h2>Selected products</h2>
-          <ul className="r-list">
-            {selected
-              .filter(({ slug }) => !samples.some((s) => s.slug === slug))
-              .map(({ slug, metrics }) => {
-              const p = projects.find((x) => x.slug === slug)!;
-              return (
-                <li key={slug}>
-                  <div className="r-line">
-                    <b>
-                      {p.title} <span className="r-kind">· {p.tagline}</span>
-                    </b>
-                    <a href={`${profile.site}/work/${slug}`}>case study</a>
-                  </div>
-                  <p>{metrics.map(([v, l]) => `${v} ${l}`).join(" · ")}</p>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-
-        <section>
-          <h2>Recognition</h2>
-          <p className="r-inline">
-            {awards
-              .slice(0, 7)
-              .map((a) => `${a.place} ${a.event} (${a.detail})`)
-              .join(" · ")}
+          <p className="r-also">
+            <b>Also:</b> {resume.also}
           </p>
         </section>
 
         <section>
-          <h2>Toolkit and education</h2>
-          <ul className="r-plain">
-            {skills.slice(0, 3).map((s) => (
-              <li key={s.group}>
-                <b>{s.group}:</b> {s.core.join(", ")}
+          <h2>Key projects</h2>
+          <ul className="r-bullets r-projects">
+            {resume.projects.map((p) => (
+              <li key={p.slug}>
+                <b>
+                  <a href={`${profile.site}/work/${p.slug}`}>{p.name}</a> [{p.tag}]:
+                </b>{" "}
+                {p.body}
               </li>
             ))}
             <li>
-              <b>Also:</b> {skills.slice(3).flatMap((s) => s.core).join(", ")}. <b>Languages:</b> {profile.languages.join(", ")}
+              <b>Also shipped:</b> {resume.alsoShipped}
             </li>
-            <li>
-              <b>Education:</b> {profile.education}
-            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Education</h2>
+          <div className="r-line">
+            <b>{edu.school}</b>
+            <span>{edu.period}</span>
+          </div>
+          <p>
+            {edu.degree} · CGPA {edu.cgpa}
+          </p>
+        </section>
+
+        <section>
+          <h2>Skills</h2>
+          <ul className="r-bullets r-projects">
+            {resume.skills.map(([group, items]) => (
+              <li key={group}>
+                <b>{group}:</b> {items}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <h2>Achievements and certifications</h2>
+          <ul className="r-bullets r-projects">
+            {resume.achievements.map((a) => (
+              <li key={a}>{a}</li>
+            ))}
           </ul>
         </section>
       </article>

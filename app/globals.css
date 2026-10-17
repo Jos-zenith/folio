@@ -670,6 +670,14 @@ html:not(.motion) .ticker ul[aria-hidden] { display: none; }
 .r-inline { color: var(--muted); }
 .r-plain li + li { margin-top: 3px; }
 .r-plain b { font-weight: 600; }
+.r-links a { display: inline; }
+.r-bullets { list-style: disc; padding-left: 18px; margin-top: 3px; color: var(--muted); }
+.r-bullets li + li { margin-top: 2px; }
+.r-projects { color: var(--text); }
+.r-projects b { font-weight: 600; }
+.r-projects a { color: var(--text); text-decoration: none; }
+.r-also { margin-top: 8px; color: var(--muted); }
+.r-also b { color: var(--text); }
 
 @media print {
   @page { size: A4; margin: 10mm 12mm; }
@@ -686,6 +694,9 @@ html:not(.motion) .ticker ul[aria-hidden] { display: none; }
   .r-head { padding-bottom: 9px; }
   .r-list li + li { margin-top: 4px; }
   .r-line > span, .r-line > a { font-size: 9.5px; }
+  .r-bullets { padding-left: 14px; margin-top: 1px; }
+  .r-bullets li + li { margin-top: 1px; }
+  .r-also { margin-top: 4px; }
   .sheet li { break-inside: avoid; }
 }
 

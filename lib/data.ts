@@ -661,7 +661,7 @@ export const experience: Role[] = [
     body: "Researched competitor landscapes, found market gaps and benchmarked features. Combined qualitative and quantitative data into recommendations on product direction.",
   },
   {
-    period: "2026 – now",
+    period: "Jul 2026 – now",
     title: "President",
     org: "GRAIT Club, Dept. of IT, LICET",
     kind: "Leadership",
@@ -1089,3 +1089,104 @@ export const ticker: string[] = [
   "Captain · 20+ engineers",
   "Convenor · Idea Cafe (IIC)",
 ];
+
+export type ResumeRole = { title: string; org: string; note?: string; period: string; bullets: string[] };
+
+const liveCount = projects.filter((p) => p.status === "Live").length;
+
+/** The one-page résumé at /resume, worded for Founder's Office applications. */
+export const resume = {
+  summary: `Final-year B.Tech IT student (2027) applying for Founder's Office roles. Co-founded a smart-parking startup as CTO, captained a 20+ member EV team to 3rd place nationally, and shipped ${liveCount} live products. I do the arithmetic before the plan, then I ship it.`,
+  roles: [
+    {
+      title: "Co-Founder & CTO",
+      org: "ParkinToday",
+      note: "smart parking",
+      period: "Sep 2024 – Jan 2026",
+      bullets: [
+        "Took the product from idea to launch; owned vision, roadmap, technical execution and investor pitches.",
+        "Sized the problem first: parking searches cause about 30% of urban congestion. Interviewed 200+ people in Chennai; 78% struggled to find a slot and 65% found manual tickets cumbersome, and those two findings set the roadmap.",
+        "Won 1st at ECircle B-Pitch, placed 5th at KSR Business Pitch, and pitched to investors at Pitch to I (Venture Immersive).",
+      ],
+    },
+    {
+      title: "Associate Product Manager Intern",
+      org: "Upskillmate",
+      period: "Jun – Jul 2026",
+      bullets: ["Ran competitor research, market-gap analysis and feature benchmarking, and recommended product direction."],
+    },
+    {
+      title: "President",
+      org: "GRAIT Club (Dept. of IT, LICET)",
+      period: "Jul 2026 – present",
+      bullets: [
+        "Directed cross-functional operations and led FLAIR 2K26, the flagship symposium (8 Aug 2026): 8 sub-events, 500+ participants, owned end to end.",
+      ],
+    },
+    {
+      title: "Club Lead & Founding Keeper",
+      org: "LICET Pattarai",
+      period: "2026 – present",
+      bullets: [
+        "Founded a daily build-and-mentoring activity where students solve real problems using design thinking.",
+        "Designed The Rookery, an 8-week online builder programme: cohorts of 25–30, huddles of 4–5, and a sponsor model with local clinics, NGOs and shops (pre-launch).",
+      ],
+    },
+    {
+      title: "Team Captain",
+      org: "Turbonites (SAEISS EFWDC)",
+      period: "Feb 2025 – Jan 2026",
+      bullets: [
+        "Led 20+ engineers across 4 disciplines to build an electric four-wheeler.",
+        "Moved the team from 4th nationally (2024) to 3rd (2025), winning the Chairman's Special Category for best design.",
+      ],
+    },
+  ] as ResumeRole[],
+  also:
+    "Convenor, Idea Café (IIC): run a research programme pairing PhD-pursuing faculty with UG students, from research question to proposal. Operations manager, Speak with Ikigai & FlutterFlow community. Research interest: B2B SaaS agentic product-market-fit analysis.",
+  projects: [
+    {
+      slug: "vina",
+      name: "Vina",
+      tag: "MSME ERP",
+      body: "Merchant UPI carries 0% MDR, so payment fees earn nothing and small shops won't pay for billing software. Made billing the free distribution, with revenue from reconciliation and lender fees.",
+    },
+    {
+      slug: "operation-nolambur",
+      name: "Trustify",
+      tag: "unit economics",
+      body: "Break-even precision for a mule-detection model was about 2.7% against a 0.4% projection, so I recommended against running it as designed.",
+    },
+    {
+      slug: "engineerfit",
+      name: "EngineerFit",
+      tag: "product decision",
+      body: "Chose an adaptive test with deterministic matching so every fit score for tier-2/3 graduates comes with its reasons.",
+    },
+    {
+      slug: "compintel",
+      name: "CompIntel",
+      tag: "B2B Salary compensation",
+      body: "Compensation model reaching R² 0.961 against a 0.884 baseline.",
+    },
+  ],
+  alsoShipped: "Uzhavan (offline agriculture platform) and BlastWatch (rice-blast early warning system).",
+  education: {
+    school: "Loyola-ICAM College of Engineering and Technology (LICET), Chennai",
+    degree: "B.Tech, Information Technology",
+    period: "2023 – 2027",
+    cgpa: "6.67",
+  },
+  skills: [
+    ["Product & strategy", "PRDs, roadmapping, prioritisation, unit economics, market research, go-to-market, user research, Agile/Scrum"],
+    ["Data", "SQL, PostgreSQL, Python (Pandas, scikit-learn), Mixpanel, PostHog"],
+    ["Engineering", "TypeScript, JavaScript, React, Next.js, Node.js, FastAPI, Supabase, Firebase, Flutter"],
+    ["Tools & languages", "Notion, Jira, Figma, GitHub, Postman, Vercel · English, Tamil, German (A2)"],
+  ] as [string, string][],
+  achievements: [
+    "1st: Envision '23 (gesture-controlled wheelchair) · 2nd: INDIA@2047 (glaucoma pressure monitor) · 4th: ImpactX 2.0 (ride-hailing system for cab drivers)",
+    "Design Spark Challenge '26 (Purple Fabric AI): RAG-based grading and study assistant for faculty rubrics",
+    "Magis NextgenX 1.0 alumnus (Cambridge-certified entrepreneurship bootcamp)",
+    "Certifications: B2B SaaS Metrics, Mixpanel product analytics, HubSpot Inbound + Sales, AI for Product Managers, PSPO I preparation",
+  ],
+};
